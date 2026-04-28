@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js"
 import profileRoutes from "./routes/ProfileRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
 
 const app = express();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
+app.use("/api/transactions", transactionRoutes);
 dotenv.config();
 
 app.get("/", (req, res) => {
