@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js"
 import profileRoutes from "./routes/ProfileRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import categoriRoutes from "./routes/categoriRoutes.js";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/categories", categoriRoutes);
 dotenv.config();
 
 app.get("/", (req, res) => {
