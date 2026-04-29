@@ -8,7 +8,8 @@
     "dev": "nodemon src/app.js",
     "migrate": "node-pg-migrate up",
     "migrate:down": "node-pg-migrate down",
-    "migrate:create": "node-pg-migrate create"
+    "migrate:create": "node-pg-migrate create",
+    "seed:categories": "node seed/categorySeed.js"
   },
   "keywords": [],
   "author": "",
