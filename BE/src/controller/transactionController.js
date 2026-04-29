@@ -3,7 +3,7 @@ import service from '../service/transactionService.js'
 const getAll = async (req, res) => {
   try {
     const result = await service.getAll(req.user.id, req.query);
-    res.status(201).json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -22,7 +22,7 @@ const getOne = async (req, res) => {
 const create = async (req, res) => {
   try {
     const trx = await service.create(req.user.id, req.body);
-    return res.status(201).json(trx);
+    return res.status(200).json(trx);
   } catch (err) {
     return res.status(400).json({ error: err.message });
   }
