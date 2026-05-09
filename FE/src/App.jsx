@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react";
+import Layout from "./components/layout/layout";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    fetch("http://localhost:3000")
-      .then(res => res.text())
-      .then(data => setMessage(data));
-  }, []);
-
   return (
-    <div>
-      <h1>{message}</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
