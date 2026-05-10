@@ -1,13 +1,13 @@
-// src/pages/Login.jsx
+// src/pages/Register.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Wallet } from "lucide-react";
 import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/assets/Logo_Full.png";
 
-export default function Login() {
-  const navigate  = useNavigate();
+export default function Register() {
+  const navigate = useNavigate();
 
-  const [form,    setForm]    = useState({ email: "", password: "" });
+  const [form,    setForm]    = useState({ name: "", email: "", password: "" });
   const [errors,  setErrors]  = useState({});
   const [loading, setLoading] = useState(false);
   const [apiErr,  setApiErr]  = useState("");
@@ -20,12 +20,9 @@ export default function Login() {
     };
   }
 
-  const handleLogin = async () => {
-  navigate("/dashboard");
-};
-
   function validate() {
     const e = {};
+    if (!form.name.trim())                      e.name     = "Nama tidak boleh kosong";
     if (!form.email)                            e.email    = "Email tidak boleh kosong";
     else if (!/\S+@\S+\.\S+/.test(form.email)) e.email    = "Format email tidak valid";
     if (!form.password)                         e.password = "Password tidak boleh kosong";
@@ -42,13 +39,24 @@ export default function Login() {
     setLoading(true);
     setApiErr("");
     try {
-      await handleLogin(form);
+      // Ganti dengan API call kamu
+      // const res = await axios.post("/auth/register", form);
+      // localStorage.setItem("token", res.data.token);
+      await new Promise((r) => setTimeout(r, 1500)); // simulasi
+      navigate("/dashboard");
     } catch (err) {
-      setApiErr(err.message ?? "Login gagal. Coba lagi.");
+      setApiErr(err.message ?? "Registrasi gagal. Coba lagi.");
     } finally {
       setLoading(false);
     }
   }
+
+  const inputClass = (field) => [
+    "w-full px-3.5 py-2.5 rounded-[10px] border bg-white text-sm outline-none transition-all placeholder:text-gray-400",
+    errors[field]
+      ? "border-red-400 ring-4 ring-red-500/10"
+      : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
+  ].join(" ");
 
   return (
     <div className="min-h-screen bg-[#F4F6FB] flex items-center justify-center p-4">
@@ -60,18 +68,18 @@ export default function Login() {
         </div>
 
         <div className="mb-7">
-          <h1 className="font-display text-2xl font-bold text-text-primary mb-1.5">
-            Selamat datang kembali 👋
+          <h1 className="text-2xl font-bold text-gray-900 mb-1.5">
+            Buat akun baru ✨
           </h1>
-          <p className="text-base text-gray-500">
-            Masuk untuk melihat ringkasan keuanganmu.
+          <p className="text-sm text-gray-500">
+            Mulai kelola keuanganmu secara cerdas dengan Wallee.
           </p>
         </div>
 
         <button className="
           w-full flex items-center justify-center gap-2.5
           h-11 rounded-[10px] border border-gray-200 bg-white
-          text-base font-medium text-gray-700
+          text-sm font-medium text-gray-700
           hover:bg-gray-50 hover:border-gray-300
           transition-all shadow-[0_1px_3px_rgba(15,24,41,0.06)] mb-5
         ">
@@ -81,8 +89,14 @@ export default function Login() {
             <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
             <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
           </svg>
-          Lanjutkan dengan Google
+          Daftar dengan Google
         </button>
+
+        <div className="flex items-center gap-3 mb-5">
+          <div className="flex-1 h-px bg-gray-100" />
+          <span className="text-xs text-gray-400 whitespace-nowrap">atau dengan email</span>
+          <div className="flex-1 h-px bg-gray-100" />
+        </div>
 
         {apiErr && (
           <div className="mb-4 px-3 py-2.5 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
@@ -94,6 +108,23 @@ export default function Login() {
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              placeholder="John Doe"
+              value={form.name}
+              onChange={set("name")}
+              autoComplete="name"
+              className={inputClass("name")}
+            />
+            {errors.name && (
+              <p className="mt-1.5 text-xs text-red-500">{errors.name}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Alamat Email
             </label>
             <input
@@ -102,12 +133,7 @@ export default function Login() {
               value={form.email}
               onChange={set("email")}
               autoComplete="email"
-              className={[
-                "w-full px-3.5 py-2.5 rounded-[10px] border bg-white text-sm outline-none transition-all",
-                errors.email
-                  ? "border-red-400 ring-4 ring-red-500/10"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
-              ].join(" ")}
+              className={inputClass("email")}
             />
             {errors.email && (
               <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>
@@ -115,26 +141,16 @@ export default function Login() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <Link to="/forgot-password" className="text-xs text-blue-600 font-medium hover:opacity-75 transition-opacity">
-                Lupa password?
-              </Link>
-            </div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              Password
+            </label>
             <input
               type="password"
-              placeholder="Masukkan password"
+              placeholder="Minimal 6 karakter"
               value={form.password}
               onChange={set("password")}
-              autoComplete="current-password"
-              className={[
-                "w-full px-3.5 py-2.5 rounded-[10px] border bg-white text-sm outline-none transition-all",
-                errors.password
-                  ? "border-red-400 ring-4 ring-red-500/10"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
-              ].join(" ")}
+              autoComplete="new-password"
+              className={inputClass("password")}
             />
             {errors.password && (
               <p className="mt-1.5 text-xs text-red-500">{errors.password}</p>
@@ -160,11 +176,11 @@ export default function Login() {
                   <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity="0.3"/>
                   <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
                 </svg>
-                Memverifikasi...
+                Membuat akun...
               </>
             ) : (
               <>
-                Masuk ke Wallee
+                Buat Akun Gratis
                 <ArrowRight size={15} strokeWidth={2.5} />
               </>
             )}
@@ -172,9 +188,9 @@ export default function Login() {
         </form>
 
         <p className="mt-5 text-center text-sm text-gray-500">
-          Belum punya akun?{" "}
-          <Link to="/register" className="text-blue-600 font-semibold hover:opacity-75 transition-opacity">
-            Daftar gratis →
+          Sudah punya akun?{" "}
+          <Link to="/login" className="text-blue-600 font-semibold hover:opacity-75 transition-opacity">
+            Masuk di sini →
           </Link>
         </p>
 
