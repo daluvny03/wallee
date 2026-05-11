@@ -4,6 +4,7 @@ import Dashboard from "./pages/dashboard";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Login2 from "./pages/login2";
+import Aichat from "./pages/chat";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/aichat" element={<Aichat />} />
         </Route>
       </Routes>
     </BrowserRouter>

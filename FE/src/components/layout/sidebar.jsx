@@ -14,7 +14,7 @@ const NAV_ITEMS = [
   { to: "/dashboard",    icon: LayoutDashboard, label: "Dashboard"    },
   { to: "/transactions", icon: ArrowLeftRight,     label: "Transaksi" },
   { to: "/analytics",      icon: BarChart3,       label: "Analitik"      },
-  { to: "/chat",      icon: MessageSquare,        label: "AI Assistant"   },
+  { to: "/aichat",      icon: MessageSquare,        label: "AI Assistant"   },
   { to: "/settings",     icon: Settings,        label: "Pengaturan"     },
 ];
 
@@ -22,7 +22,7 @@ const Sidebar = () => {
   return (
     <aside className="hidden lg:flex flex-col w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0 z-30">
 
-      <div className="p-6 pb-4 border-b border-gray-100">
+      <div className="p-4 border-b border-gray-100">
         <img src={WalleeLogo} alt="Wallee Logo" />
       </div>
 

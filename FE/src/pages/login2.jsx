@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Wallet, Sparkles, TrendingUp, ShieldCheck } from "lucide-react";
@@ -44,7 +43,6 @@ export default function Login() {
     setLoading(true);
     setApiErr("");
     try {
-      // await login(form);
       await new Promise((r) => setTimeout(r, 1500));
       navigate("/dashboard", { replace: true });
     } catch (err) {
@@ -66,20 +64,16 @@ export default function Login() {
 
       <div className="w-full max-w-[880px] bg-white rounded-2xl overflow-hidden shadow-[0_8px_48px_rgba(15,24,41,0.12)] flex">
 
-        {/* ── LEFT — Brand Panel ── */}
         <div className="hidden lg:flex flex-col w-[42%] flex-shrink-0 p-9 relative overflow-hidden"
           style={{ background: "linear-gradient(135deg, rgba(44, 114, 245, 0.47) 0%, rgba(176, 52, 238, 0.48) 100%)" }}
         >
-          {/* Decorative blobs */}
           <div className="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-12 -right-12 w-48 h-48 rounded-full bg-purple-500/10 blur-3xl pointer-events-none" />
 
-          {/* Logo */}
         <div className="flex items-center gap-2.5 mb-10 relative z-10">
             <img src={WalleeLogo} alt="Wallee Logo" className="h-15 w-auto" />
         </div>
 
-          {/* Copy */}
           <div className="flex-1 relative z-10">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-5 h-0.5 rounded bg-gradient-to-r from-[#3975E6] to-[#9E4CC6]" />
@@ -103,7 +97,6 @@ export default function Login() {
               Lacak pengeluaran, dapatkan insight dari AI, dan capai tujuan finansialmu lebih cepat.
             </p>
 
-            {/* Features */}
             <div className="flex flex-col gap-3 mb-10">
               {FEATURES.map(({ Icon, label }) => (
                 <div key={label} className="flex items-center gap-3">
@@ -117,11 +110,9 @@ export default function Login() {
           </div>
         </div>
 
-        {/* ── RIGHT — Form Panel ── */}
         <div className="flex-1 flex items-center justify-center px-8 py-10 sm:px-12">
           <div className="w-full max-w-[340px]">
 
-            {/* Heading */}
             <div className="mb-7">
               <h1 className="text-2xl font-bold text-gray-900 mb-1.5">
                 Selamat datang kembali 👋
@@ -131,7 +122,6 @@ export default function Login() {
               </p>
             </div>
 
-            {/* Google OAuth */}
             <button className="
               w-full flex items-center justify-center gap-2.5
               h-11 rounded-[10px] border border-gray-200 bg-white
@@ -148,24 +138,20 @@ export default function Login() {
               Lanjutkan dengan Google
             </button>
 
-            {/* Divider */}
             <div className="flex items-center gap-3 mb-5">
               <div className="flex-1 h-px bg-gray-100" />
               <span className="text-xs text-gray-400 whitespace-nowrap">atau dengan email</span>
               <div className="flex-1 h-px bg-gray-100" />
             </div>
 
-            {/* API Error */}
             {apiErr && (
               <div className="mb-4 px-3 py-2.5 rounded-lg bg-red-50 border border-red-200 text-sm text-red-600">
                 {apiErr}
               </div>
             )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} noValidate className="space-y-4">
 
-              {/* Email */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                   Alamat Email
@@ -183,7 +169,6 @@ export default function Login() {
                 )}
               </div>
 
-              {/* Password */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-sm font-semibold text-gray-700">
@@ -206,7 +191,6 @@ export default function Login() {
                 )}
               </div>
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={loading}
