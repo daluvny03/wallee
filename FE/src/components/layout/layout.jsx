@@ -6,7 +6,7 @@ const Layout = ()=>{
     return (
         <div className="min-h-screen bg-background">
             <Sidebar />
-            <main className="lg:ml-64 min-h-screen pb-24 lg:pb-0">
+            <main className="lg:ml-64 min-h-screen pb-24 lg:pb-0 bg-slate-50">
                 <Outlet />
             </main>
         </div>
