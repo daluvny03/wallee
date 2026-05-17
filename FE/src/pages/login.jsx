@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Wallet } from "lucide-react";
 import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/assets/Logo_Full.png";
+import Card from "../components/ui/card";
+import ButtonGrad from "../components/ui/buttongrad";
+import InputFields from "../components/ui/input";
 
 export default function Login() {
   const navigate  = useNavigate();
@@ -52,7 +55,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-[#F4F6FB] flex items-center justify-center p-4">
 
-      <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(15,24,41,0.12)] p-8">
+      <Card className="p-6 md:p-8 shadow-md">
 
         <div className="flex justify-center mb-4">
             <img src={WalleeLogo} alt="Wallee Logo" className="h-15 w-auto" />
@@ -95,18 +98,13 @@ export default function Login() {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Alamat Email
             </label>
-            <input
+            <InputFields
               type="email"
               placeholder="nama@email.com"
               value={form.email}
-              onChange={set("email")}
-              autoComplete="email"
-              className={[
-                "w-full px-3.5 py-2.5 rounded-[10px] border bg-white text-sm outline-none transition-all",
-                errors.email
-                  ? "border-red-400 ring-4 ring-red-500/10"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
-              ].join(" ")}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="pl-11"
+              required
             />
             {errors.email && (
               <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>
@@ -122,35 +120,24 @@ export default function Login() {
                 Lupa password?
               </Link>
             </div>
-            <input
+            <InputFields
               type="password"
-              placeholder="Masukkan password"
+              placeholder="••••••••"
               value={form.password}
-              onChange={set("password")}
-              autoComplete="current-password"
-              className={[
-                "w-full px-3.5 py-2.5 rounded-[10px] border bg-white text-sm outline-none transition-all",
-                errors.password
-                  ? "border-red-400 ring-4 ring-red-500/10"
-                  : "border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
-              ].join(" ")}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              className="pl-11 pr-11"
+              required
             />
             {errors.password && (
               <p className="mt-1.5 text-xs text-red-500">{errors.password}</p>
             )}
           </div>
 
-          <button
+          <ButtonGrad
             type="submit"
             disabled={loading}
             className="
-              w-full h-11 rounded-[10px] flex items-center justify-center gap-2
-              bg-gradient-to-r from-[#3975E6] to-[#9E4CC6]
-              text-white text-sm font-semibold
-              shadow-[0_4px_14px_rgba(57,117,230,0.3)]
-              hover:opacity-90 active:scale-[.98]
-              disabled:opacity-60 disabled:cursor-not-allowed
-              transition-all
+              w-full h-13 rounded-xl font-bold mt-4
             "
           >
             {loading ? (
@@ -167,7 +154,7 @@ export default function Login() {
                 <ArrowRight size={15} strokeWidth={2.5} />
               </>
             )}
-          </button>
+          </ButtonGrad>
         </form>
 
         <p className="mt-5 text-center text-sm text-gray-500">
@@ -177,7 +164,7 @@ export default function Login() {
           </Link>
         </p>
 
-      </div>
+      </Card>
     </div>
   );
 }

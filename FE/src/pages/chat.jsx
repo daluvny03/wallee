@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Loader2, Sparkles, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
+import Card from '../components/ui/card';
+import ButtonGrad from '../components/ui/buttongrad';
+import InputFields from '../components/ui/input';
 
 // --- DATA DARI CLAUDE ---
 const QUICK_CHIPS = [
@@ -179,26 +182,26 @@ export default function Chat() {
           onSubmit={(e) => { e.preventDefault(); handleSend(); }}
           className="max-w-3xl mx-auto flex gap-2"
         >
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
+          <InputFields
+                placeholder="Tanya tentang keuangan Anda..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="Tanya tentang keuangan Anda..."
-            className="flex-1 h-12 px-4 bg-gray-100 border border-gray-300/50 rounded-xl outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 transition-all"
-            disabled={isLoading}
-          />
-          <button
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+                disabled={isLoading}
+                className="pr-4 h-12 rounded-xl"
+              />
+          <ButtonGrad
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="bg-gradient-to-br from-[#3975E6] to-[#9E4CC6] p-3 rounded-xl text-white disabled:opacity-50 transition-all hover:shadow-lg hover:shadow-primary/25 active:scale-95"
+            className="w-12 h-12 rounded-xl"
           >
             <Send className="w-5 h-5" />
-          </button>
+          </ButtonGrad>
         </form>
       </div>
     </div>

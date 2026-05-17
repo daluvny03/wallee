@@ -1,6 +1,5 @@
 import db from '../config/db.js'
 
-// ─── GET ALL ───────────────────────────────────────────────
 const getAll = async (userId, { type, startDate, endDate, page = 1, limit = 20 }) => {
   const conditions = ['t.user_id = $1'];
   const params = [userId];
@@ -45,7 +44,6 @@ const getAll = async (userId, { type, startDate, endDate, page = 1, limit = 20 }
   };
 };
 
-// ─── GET BY ID ─────────────────────────────────────────────
 const getById = async (id, userId) => {
   const result = await db.query(
     `SELECT
@@ -63,7 +61,6 @@ const getById = async (id, userId) => {
   return result.rows[0] || null;
 };
 
-// ─── CREATE ────────────────────────────────────────────────
 const create = async (userId, { amount, type, description, date, category_id }) => {
   const result = await db.query(
     `INSERT INTO transactions (user_id, category_id, amount, type, description, date)
@@ -75,7 +72,6 @@ const create = async (userId, { amount, type, description, date, category_id }) 
   return result.rows[0];
 };
 
-// ─── UPDATE ────────────────────────────────────────────────
 const update = async (id, userId, fields) => {
   const allowed = ['amount', 'type', 'description', 'date', 'category_id'];
   const setClauses = [];
@@ -108,7 +104,6 @@ const update = async (id, userId, fields) => {
   return result.rows[0];
 };
 
-// ─── DELETE ────────────────────────────────────────────────
 const remove = async (id, userId) => {
   const result = await db.query(
     'DELETE FROM transactions WHERE id = $1 AND user_id = $2',

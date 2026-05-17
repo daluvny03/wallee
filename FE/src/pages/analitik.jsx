@@ -2,17 +2,9 @@ import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, BarChart3, Calendar } from 'lucide-react';
+import Card from '../components/ui/card';
+import SelectFields from '../components/ui/select';
 
-// ── Inline Card ───────────────────────────────────────────────
-function Card({ children, className = "", ...props }) {
-  return (
-    <div className={`bg-white rounded-2xl shadow-sm ${className}`} {...props}>
-      {children}
-    </div>
-  );
-}
-
-// ── Dummy Data ────────────────────────────────────────────────
 const DUMMY_TRANSACTIONS = [
   { id: '1', type: 'income',  amount: 5000000, category: 'salary',        date: '2026-05-13' },
   { id: '2', type: 'expense', amount: 150000,  category: 'food',          date: '2026-05-01' },
@@ -101,16 +93,15 @@ export default function Analytics() {
         </div>
 
         <div className="relative">
-          <select
-            value={period}
-            onChange={(e) => setPeriod(e.target.value)}
-            className="appearance-none h-10 pl-3 pr-8 bg-white border border-gray-200 rounded-xl text-sm outline-none cursor-pointer hover:bg-gray-50 transition-colors"
-          >
+            <SelectFields 
+              value={period} 
+              onChange={(e) => setPeriod(e.target.value)}
+              className="appearance-none w-30 text-xs"
+            >
             <option value="week">Minggu Ini</option>
             <option value="month">Bulan Ini</option>
             <option value="year">Tahun Ini</option>
-          </select>
-          <Calendar className="w-4 h-4 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400" />
+          </SelectFields>
         </div>
       </div>
 

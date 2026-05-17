@@ -5,46 +5,12 @@ import { format } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast, Toaster } from "sonner";
-
-// ── Inline Components ─────────────────────────────────────────
-
-function Card({ children, className = "", ...props }) {
-  return (
-    <div className={`bg-white rounded-2xl shadow-sm ${className}`} {...props}>
-      {children}
-    </div>
-  );
-}
-
-function Badge({ children, className = "", variant = "secondary", ...props }) {
-  const variants = {
-    secondary: "bg-gray-100 text-gray-600",
-    success:   "bg-emerald-50 text-emerald-600",
-    danger:    "bg-red-50 text-red-600",
-  };
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${variants[variant] ?? variants.secondary} ${className}`}
-      {...props}
-    >
-      {children}
-    </span>
-  );
-}
-
-function Button({ children, className = "", size = "md", ...props }) {
-  const sizes = { sm: "px-3 py-1.5 text-sm", md: "px-4 py-2 text-sm" };
-  return (
-    <button
-      className={`inline-flex items-center justify-center font-medium rounded-xl transition-all active:scale-95 disabled:opacity-50 ${sizes[size] ?? sizes.md} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
-
-// ── Data ──────────────────────────────────────────────────────
+import InputFields from '../components/ui/input';
+import SelectFields from '../components/ui/select';
+import Card from '../components/ui/card';
+import Badge from '../components/ui/Badge';
+import Button from '../components/ui/button';
+import ButtonGrad from '../components/ui/buttongrad';
 
 const DUMMY_TRANSACTIONS = [
   { id: '1', type: 'expense', amount: 85000,   category: 'food',          description: 'Makan Siang Bakso',    date: new Date().toISOString() },
@@ -72,8 +38,6 @@ function formatCurrency(val) {
     style: 'currency', currency: 'IDR', maximumFractionDigits: 0,
   }).format(val);
 }
-
-// ── Page ──────────────────────────────────────────────────────
 
 export default function Transactions() {
   const [search,          setSearch]          = useState('');
@@ -105,61 +69,54 @@ export default function Transactions() {
 
       <Toaster position="top-right" richColors />
 
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Transaksi</h1>
           <p className="text-sm text-gray-400">Lihat riwayat keuangan Anda</p>
         </div>
         <Link to="/add-transaction">
-          <Button
+          <ButtonGrad
             size="sm"
-            className="text-white border-0 hover:opacity-90 shadow-md"
-            style={{ background: "linear-gradient(135deg,#3975E6,#9E4CC6)" }}
+            className="px-4 h-9 hover:opacity-90"
           >
             <Plus className="w-4 h-4 mr-1" /> Tambah
-          </Button>
+          </ButtonGrad>
         </Link>
       </div>
 
-      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
-        {/* Search */}
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
+          <InputFields
             placeholder="Cari transaksi..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 h-11 bg-white border border-gray-200 rounded-xl outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-400 transition-all text-sm"
+            className="pl-10"
           />
         </div>
 
-        {/* Filter tipe */}
-        <select
+        <SelectFields
           value={filterType}
           onChange={(e) => setFilterType(e.target.value)}
-          className="h-11 px-3 bg-white border border-gray-200 rounded-xl text-sm outline-none cursor-pointer text-gray-700"
+          className="sm:w-48"
         >
           <option value="all">Semua Tipe</option>
           <option value="income">Pemasukan</option>
           <option value="expense">Pengeluaran</option>
-        </select>
+        </SelectFields>
 
-        {/* Filter kategori */}
-        <select
+        <SelectFields
           value={filterCategory}
           onChange={(e) => setFilterCategory(e.target.value)}
-          className="h-11 px-3 bg-white border border-gray-200 rounded-xl text-sm outline-none cursor-pointer text-gray-700"
-        >
+          className="sm:w-48"
+        > 
           <option value="all">Semua Kategori</option>
           {Object.entries(categoryLabels).map(([k, v]) => (
             <option key={k} value={k}>{categoryIcons[k]} {v}</option>
           ))}
-        </select>
+        </SelectFields>
       </div>
 
-      {/* Empty state */}
       {filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 bg-white rounded-3xl border-2 border-dashed border-gray-200">
           <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
@@ -178,14 +135,12 @@ export default function Transactions() {
             .sort(([a], [b]) => new Date(b) - new Date(a))
             .map(([dateKey, txs]) => (
               <div key={dateKey}>
-                {/* Date label */}
                 <p className="text-xs font-bold text-gray-400 mb-3 px-1 uppercase tracking-wider">
                   {dateKey !== 'unknown'
                     ? format(new Date(dateKey), 'EEEE, d MMMM yyyy', { locale: idLocale })
                     : 'Tanggal tidak diketahui'}
                 </p>
 
-                {/* Transaction card */}
                 <Card className="border border-gray-100 divide-y divide-gray-100 overflow-hidden">
                   <AnimatePresence initial={false}>
                     {txs.map((tx) => (
@@ -196,12 +151,11 @@ export default function Transactions() {
                         exit={{ opacity: 0, x: 10 }}
                         className="flex items-center gap-4 p-4 group hover:bg-gray-50 transition-colors"
                       >
-                        {/* Icon */}
+
                         <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-xl shrink-0">
                           {categoryIcons[tx.category] || "📦"}
                         </div>
 
-                        {/* Info */}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold truncate text-gray-800">
                             {tx.description || categoryLabels[tx.category]}
@@ -211,14 +165,12 @@ export default function Transactions() {
                           </div>
                         </div>
 
-                        {/* Amount */}
                         <div className="text-right shrink-0 mr-2">
                           <p className={`text-sm font-bold ${tx.type === 'income' ? 'text-emerald-600' : 'text-gray-800'}`}>
                             {tx.type === 'income' ? '+' : '-'}{formatCurrency(tx.amount)}
                           </p>
                         </div>
 
-                        {/* Delete */}
                         <button
                           onClick={() => handleDelete(tx.id)}
                           className="opacity-0 group-hover:opacity-100 p-2 rounded-xl hover:bg-red-50 text-red-500 transition-all active:scale-90"

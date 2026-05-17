@@ -3,6 +3,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Wallet } from "lucide-react";
 import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/assets/Logo_Full.png";
+import Card from "../components/ui/card";
+import ButtonGrad from "../components/ui/buttongrad";
+import InputFields from "../components/ui/input";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -61,7 +64,7 @@ export default function Register() {
   return (
     <div className="min-h-screen bg-[#F4F6FB] flex items-center justify-center p-4">
 
-      <div className="w-full max-w-[420px] bg-white rounded-2xl shadow-[0_8px_40px_rgba(15,24,41,0.12)] p-8">
+      <Card className="p-6 md:p-8 shadow-md">
 
         <div className="flex justify-center mb-4">
             <img src={WalleeLogo} alt="Wallee Logo" className="h-15 w-auto" />
@@ -110,14 +113,14 @@ export default function Register() {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Nama Lengkap
             </label>
-            <input
-              type="text"
-              placeholder="John Doe"
-              value={form.name}
-              onChange={set("name")}
-              autoComplete="name"
-              className={inputClass("name")}
-            />
+            <InputFields
+                  type="text"
+                  placeholder="Masukkan nama lengkap Anda"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="px-3.5 py-2.5"
+                  required
+                />
             {errors.name && (
               <p className="mt-1.5 text-xs text-red-500">{errors.name}</p>
             )}
@@ -127,13 +130,13 @@ export default function Register() {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Alamat Email
             </label>
-            <input
+            <InputFields
               type="email"
               placeholder="nama@email.com"
               value={form.email}
-              onChange={set("email")}
-              autoComplete="email"
-              className={inputClass("email")}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              className="px-3.5 py-2.5"
+              required
             />
             {errors.email && (
               <p className="mt-1.5 text-xs text-red-500">{errors.email}</p>
@@ -144,30 +147,24 @@ export default function Register() {
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Password
             </label>
-            <input
+            <InputFields
               type="password"
-              placeholder="Minimal 6 karakter"
+              placeholder="••••••••"
               value={form.password}
-              onChange={set("password")}
-              autoComplete="new-password"
-              className={inputClass("password")}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              className="px-3.5 py-2.5 text-black"
+              required
             />
             {errors.password && (
               <p className="mt-1.5 text-xs text-red-500">{errors.password}</p>
             )}
           </div>
 
-          <button
+          <ButtonGrad
             type="submit"
             disabled={loading}
             className="
-              w-full h-11 rounded-[10px] flex items-center justify-center gap-2
-              bg-gradient-to-r from-[#3975E6] to-[#9E4CC6]
-              text-white text-sm font-semibold
-              shadow-[0_4px_14px_rgba(57,117,230,0.3)]
-              hover:opacity-90 active:scale-[.98]
-              disabled:opacity-60 disabled:cursor-not-allowed
-              transition-all
+             w-full h-13 rounded-xl font-bold mt-2
             "
           >
             {loading ? (
@@ -184,7 +181,7 @@ export default function Register() {
                 <ArrowRight size={15} strokeWidth={2.5} />
               </>
             )}
-          </button>
+          </ButtonGrad>
         </form>
 
         <p className="mt-5 text-center text-sm text-gray-500">
@@ -194,7 +191,7 @@ export default function Register() {
           </Link>
         </p>
 
-      </div>
+      </Card>
     </div>
   );
 }

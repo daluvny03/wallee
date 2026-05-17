@@ -8,6 +8,9 @@ import {
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { id as idLocale } from 'date-fns/locale';
+import Card from '../components/ui/card';
+import ButtonGrad from '../components/ui/buttongrad';
+import Badge from '../components/ui/Badge';
 
 // --- DUMMY DATA (Simulasi Data Backend) ---
 const DUMMY_TRANSACTIONS = [
@@ -42,7 +45,7 @@ export default function Dashboard() {
     if (balanceHidden) return "••••••••";
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
   };
-  const format = (val) => {
+  const formatUang = (val) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
   };
 
@@ -68,7 +71,7 @@ export default function Dashboard() {
         transition={{ duration: 0.5 }}
         className="bg-[linear-gradient(135deg,#3975E6,#9E4CC6)] rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-xl shadow-primary/20"
       >
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,#3975E6,#9E4CC6)]" />
+        <Card className="absolute inset-0 bg-[linear-gradient(135deg,#3975E6,#9E4CC6)]" />
         <div className="relative">
           <div className="flex items-center justify-between mb-4">
             <p className="text-white/80 text-sm font-medium">Total Saldo</p>
@@ -114,39 +117,39 @@ export default function Dashboard() {
 
       {/* 4. STATS GRID (Income & Expense Month summary) */}
       <div className="grid grid-cols-2 gap-3">
-        <div className="p-4 bg-card border border-border/50 rounded-2xl shadow-sm">
+        <Card className="p-4 flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-2 text-emerald-600">
             <TrendingUp className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase">Pemasukan</span>
           </div>
-          <p className="text-lg font-bold text-slate-800">{format(totalIncome)}</p>
-        </div>
-        <div className="p-4 bg-card border border-border/50 rounded-2xl shadow-sm">
+          <p className="text-lg font-bold text-slate-800">{formatUang(totalIncome)}</p>
+        </Card>
+        <Card className="p-4 flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-2 text-red-500">
             <TrendingDown className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase">Pengeluaran</span>
           </div>
-          <p className="text-lg font-bold text-slate-800">{format(totalExpense)}</p>
-        </div>
+          <p className="text-lg font-bold text-slate-800">{formatUang(totalExpense)}</p>
+        </Card>
       </div>
 
       {/* 5. RECENT TRANSACTIONS (Gabungan RecentTransactions.jsx menggunakan Tag HTML) */}
-      <div className="bg-card border border-border/50 rounded-3xl shadow-sm overflow-hidden">
+      <Card>
         <div className="flex items-center justify-between p-5 pb-3">
           <h3 className="font-bold text-[hsl(225,20%,12%)]">Transaksi Terakhir</h3>
-          <Link to="/transactions" className="text-xs text-primary font-bold flex items-center gap-1 hover:underline">
+          <Link to="/transactions" className="text-xs text-blue-500 font-semibold flex items-center gap-1 hover:underline">
             Lihat Semua <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
         
-        <div className="px-5 pb-5 divide-y divide-border/30">
+        <div className="px-5 pb-5">
           {transactions.slice(0, 5).map((tx, i) => (
             <motion.div
               key={tx.id}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-4 py-4 group"
+              className="flex items-center gap-4 py-4 group border-b border-gray-200 last:border-0"
             >
               <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl shrink-0">
                 {categoryIcons[tx.category] || "📦"}
@@ -161,14 +164,16 @@ export default function Dashboard() {
               </div>
               <div className="text-right">
                 <p className={`text-sm font-bold ${tx.type === 'income' ? 'text-emerald-600' : 'text-slate-800'}`}>
-                  {tx.type === 'income' ? '+' : '-'}{format(tx.amount)}
+                  {tx.type === 'income' ? '+' : '-'}{formatUang(tx.amount)}
                 </p>
-                <p className="text-[9px] text-muted-foreground italic">{categoryLabels[tx.category]}</p>
+                <Badge variant={tx.type === 'income' ? 'success' : 'secondary'} className="text-[9px] px-1.5 py-0 mt-0.5">
+                  {categoryLabels[tx.category]}
+                </Badge>
               </div>
             </motion.div>
           ))}
         </div>
-      </div>
+      </Card>
 
     </div>
   );
