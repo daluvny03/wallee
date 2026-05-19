@@ -10,6 +10,8 @@ import {
   Plus,
 } from "lucide-react";
 import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/assets/Logo_Full.png";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const NAV_ITEMS = [
   { to: "/dashboard",    icon: LayoutDashboard, label: "Dashboard"    },
@@ -20,6 +22,12 @@ const NAV_ITEMS = [
 ];
 
 const Sidebar = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+  logout();
+  navigate("/login");
+};
   return (
     <aside className="hidden lg:flex flex-col w-64 h-screen bg-white border-r border-gray-200 fixed left-0 top-0 z-30">
 
@@ -71,7 +79,7 @@ const Sidebar = () => {
       {/* Tombol Keluar */}
       <div className="p-4 border-t border-gray-100">
         <button
-          onClick={() => console.log("logout")} // ganti dengan fungsi logout kamu
+          onClick={handleLogout} // ganti dengan fungsi logout kamu
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
         >
           <LogOut size={18} strokeWidth={1.75} className="flex-shrink-0" />

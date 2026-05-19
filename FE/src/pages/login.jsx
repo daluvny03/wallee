@@ -5,8 +5,11 @@ import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/a
 import Card from "../components/ui/card";
 import ButtonGrad from "../components/ui/buttongrad";
 import InputFields from "../components/ui/input";
+import { useAuth } from "../context/AuthContext";
+import { loginUser } from "../services/auth_service";
 
 export default function Login() {
+  const { login } = useAuth();
   const navigate  = useNavigate();
 
   const [form,    setForm]    = useState({ email: "", password: "" });
@@ -23,6 +26,8 @@ export default function Login() {
   }
 
   const handleLogin = async () => {
+    const response = await loginUser(form.email, form.password);
+    login(response.token, response.user);
   navigate("/dashboard");
 };
 

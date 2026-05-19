@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Wallet, TrendingUp, TrendingDown, ArrowLeftRight, 
@@ -11,6 +11,7 @@ import { id as idLocale } from 'date-fns/locale';
 import Card from '../components/ui/card';
 import ButtonGrad from '../components/ui/buttongrad';
 import Badge from '../components/ui/Badge';
+import { getTransactions } from '../services/transactionService';
 
 // --- DUMMY DATA (Simulasi Data Backend) ---
 const DUMMY_TRANSACTIONS = [
@@ -33,8 +34,25 @@ const categoryIcons = {
 };
 
 export default function Dashboard() {
-  const [transactions] = useState(DUMMY_TRANSACTIONS);
+  const [transactions, setTransactions] = useState([]);
   const [balanceHidden, setBalanceHidden] = useState(false);
+  const fetchTransactions = async () => {
+      try {
+        const data = await getTransactions();
+        setTimeout(() => {
+        setTransactions(data);
+      }, 0);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTransactions();
+    }, []);
+    if (!transactions.length) {
+    return <p>Belum ada transaksi</p>;
+    }
 
   // Perhitungan Statis
   const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);

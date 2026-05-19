@@ -45,7 +45,7 @@ export default function Transactions() {
   const [search,          setSearch]          = useState('');
   const [filterType,      setFilterType]      = useState('all');
   const [filterCategory,  setFilterCategory]  = useState('all');
-  const [transactions,    setTransactions]    = useState(DUMMY_TRANSACTIONS);
+  const [transactions,    setTransactions]    = useState([]);
 
   const fetchTransactions = async () => {
     try {
