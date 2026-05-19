@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, TrendingUp, TrendingDown, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { createTransaction } from '../services/transactionService';
 
 import ButtonGrad from '../components/ui/buttongrad';
 import SelectFields from '../components/ui/select';
@@ -39,17 +40,19 @@ export default function AddTransaction() {
     note: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsPending(true);
     
-    // Simulasi pengiriman data
-    setTimeout(() => {
-      console.log("Data Transaksi:", { ...form, type });
-      alert("Transaksi berhasil disimpan (Simulasi)");
+    try {
+      await createTransaction(form);
+
+      navigate("/transaksi");
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsPending(false);
-      navigate(-1);
-    }, 1000);
+    }
   };
 
   return (

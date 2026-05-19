@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Plus, Trash2, ArrowLeftRight } from 'lucide-react';
 import { format } from 'date-fns';
@@ -11,6 +11,8 @@ import Card from '../components/ui/card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/button';
 import ButtonGrad from '../components/ui/buttongrad';
+import { getTransactions } from '../services/transactionService';
+import { deleteTransaction } from '../services/transactionService';
 
 const DUMMY_TRANSACTIONS = [
   { id: '1', type: 'expense', amount: 85000,   category: 'food',          description: 'Makan Siang Bakso',    date: new Date().toISOString() },
@@ -45,9 +47,32 @@ export default function Transactions() {
   const [filterCategory,  setFilterCategory]  = useState('all');
   const [transactions,    setTransactions]    = useState(DUMMY_TRANSACTIONS);
 
-  const handleDelete = (id) => {
-    setTransactions(prev => prev.filter(tx => tx.id !== id));
-    toast.success('Transaksi berhasil dihapus');
+  const fetchTransactions = async () => {
+    try {
+      const data = await getTransactions();
+      setTimeout(() => {
+      setTransactions(data);
+    }, 0);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+  if (!transactions.length) {
+  return <p>Belum ada transaksi</p>;
+  }
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteTransaction(id);
+      fetchTransactions();
+      toast.success('Transaksi berhasil dihapus');
+    } catch (error) {
+      console.error('Error deleting transaction:', error);
+    }
   };
 
   const filtered = transactions.filter(tx => {
