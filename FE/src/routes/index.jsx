@@ -28,9 +28,9 @@ export default function AppRoutes() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="transaksi" element={<Transaksi />} />
         <Route path="add-transaction" element={<addTransaction />} />
-        <Route path="chat" element={<Chat />} />
+        <Route path="aichat" element={<Chat />} />
         <Route path="analitik" element={<Analitik />} />
-        <Route path="setting" element={<Setting />} />
+        <Route path="settings" element={<Setting />} />
       </Route>
     </Routes>
   );

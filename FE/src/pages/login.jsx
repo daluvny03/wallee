@@ -27,9 +27,9 @@ export default function Login() {
 
   const handleLogin = async () => {
     const response = await loginUser(form.email, form.password);
-    login(response.token, response.user);
-  navigate("/dashboard");
-};
+    login(response.data.token, response.data.user);
+    navigate("/dashboard");
+  };
 
   function validate() {
     const e = {};

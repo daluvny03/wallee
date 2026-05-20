@@ -14,27 +14,6 @@ import ButtonGrad from '../components/ui/buttongrad';
 import { getTransactions } from '../services/transactionService';
 import { deleteTransaction } from '../services/transactionService';
 
-const DUMMY_TRANSACTIONS = [
-  { id: '1', type: 'expense', amount: 85000,   category: 'food',          description: 'Makan Siang Bakso',    date: new Date().toISOString() },
-  { id: '2', type: 'income',  amount: 5000000, category: 'salary',        description: 'Gaji Bulanan',         date: new Date().toISOString() },
-  { id: '3', type: 'expense', amount: 150000,  category: 'transport',     description: 'Isi Bensin Mobil',     date: new Date(Date.now() - 86400000).toISOString() },
-  { id: '4', type: 'expense', amount: 200000,  category: 'entertainment', description: 'Nonton Bioskop',       date: new Date(Date.now() - 86400000).toISOString() },
-  { id: '5', type: 'expense', amount: 1200000, category: 'bills',         description: 'Bayar Listrik & Air',  date: new Date(Date.now() - 172800000).toISOString() },
-];
-
-const categoryLabels = {
-  food: "Makanan", transport: "Transportasi", shopping: "Belanja",
-  entertainment: "Hiburan", bills: "Tagihan", health: "Kesehatan",
-  education: "Pendidikan", salary: "Gaji", freelance: "Freelance",
-  investment: "Investasi", gift: "Hadiah", other: "Lainnya",
-};
-
-const categoryIcons = {
-  food: "🍕", transport: "🚗", shopping: "🛍️", entertainment: "🎬",
-  bills: "📄", health: "💊", education: "📚", salary: "💰",
-  freelance: "💻", investment: "📈", gift: "🎁", other: "📦",
-};
-
 function formatCurrency(val) {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency', currency: 'IDR', maximumFractionDigits: 0,
@@ -51,7 +30,7 @@ export default function Transactions() {
     try {
       const data = await getTransactions();
       setTimeout(() => {
-      setTransactions(data);
+      setTransactions(data.data.transactions);
     }, 0);
     } catch (error) {
       console.log(error);
@@ -61,9 +40,6 @@ export default function Transactions() {
   useEffect(() => {
     fetchTransactions();
   }, []);
-  if (!transactions.length) {
-  return <p>Belum ada transaksi</p>;
-  }
 
   const handleDelete = async (id) => {
     try {
@@ -76,7 +52,7 @@ export default function Transactions() {
   };
 
   const filtered = transactions.filter(tx => {
-    const matchSearch   = !search || tx.description?.toLowerCase().includes(search.toLowerCase()) || categoryLabels[tx.category]?.toLowerCase().includes(search.toLowerCase());
+    const matchSearch   = !search || tx.description?.toLowerCase().includes(search.toLowerCase());
     const matchType     = filterType     === 'all' || tx.type     === filterType;
     const matchCategory = filterCategory === 'all' || tx.category === filterCategory;
     return matchSearch && matchType && matchCategory;
@@ -136,9 +112,8 @@ export default function Transactions() {
           className="sm:w-48"
         > 
           <option value="all">Semua Kategori</option>
-          {Object.entries(categoryLabels).map(([k, v]) => (
-            <option key={k} value={k}>{categoryIcons[k]} {v}</option>
-          ))}
+          <option value="madang">madang</option>
+          <option value="blonjo">blonjo</option>
         </SelectFields>
       </div>
 
@@ -178,15 +153,15 @@ export default function Transactions() {
                       >
 
                         <div className="w-12 h-12 rounded-2xl bg-gray-100 flex items-center justify-center text-xl shrink-0">
-                          {categoryIcons[tx.category] || "📦"}
+                          {"📦"}
                         </div>
 
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold truncate text-gray-800">
-                            {tx.description || categoryLabels[tx.category]}
+                            {tx.description}
                           </p>
                           <div className="flex items-center gap-2 mt-1">
-                            <Badge>{categoryLabels[tx.category]}</Badge>
+                            <Badge>{"📦"}</Badge>
                           </div>
                         </div>
 

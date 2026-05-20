@@ -13,26 +13,6 @@ import ButtonGrad from '../components/ui/buttongrad';
 import Badge from '../components/ui/Badge';
 import { getTransactions } from '../services/transactionService';
 
-// --- DUMMY DATA (Simulasi Data Backend) ---
-const DUMMY_TRANSACTIONS = [
-  { id: '1', type: 'income', amount: 5000000, category: 'salary', description: 'Gaji Bulanan', date: new Date().toISOString() },
-  { id: '2', type: 'expense', amount: 85000, category: 'food', description: 'Makan Bakso', date: new Date().toISOString() },
-  { id: '3', type: 'expense', amount: 150000, category: 'transport', description: 'Bensin Mobil', date: new Date(Date.now() - 86400000).toISOString() },
-  { id: '4', type: 'expense', amount: 1200000, category: 'bills', description: 'Tagihan Listrik', date: new Date(Date.now() - 172800000).toISOString() },
-  { id: '5', type: 'income', amount: 500000, category: 'freelance', description: 'Proyek Desain', date: new Date(Date.now() - 259200000).toISOString() },
-];
-
-const categoryLabels = {
-  food: "Makanan", transport: "Transportasi", shopping: "Belanja",
-  entertainment: "Hiburan", bills: "Tagihan", salary: "Gaji",
-  freelance: "Freelance", other: "Lainnya"
-};
-
-const categoryIcons = {
-  food: "🍕", transport: "🚗", shopping: "🛍️", entertainment: "🎬",
-  bills: "📄", salary: "💰", freelance: "💻", other: "📦"
-};
-
 export default function Dashboard() {
   const [transactions, setTransactions] = useState([]);
   const [balanceHidden, setBalanceHidden] = useState(false);
@@ -40,7 +20,7 @@ export default function Dashboard() {
       try {
         const data = await getTransactions();
         setTimeout(() => {
-        setTransactions(data);
+        setTransactions(data.data.transactions);
       }, 0);
       } catch (error) {
         console.log(error);
@@ -50,13 +30,8 @@ export default function Dashboard() {
     useEffect(() => {
       fetchTransactions();
     }, []);
-    if (!transactions.length) {
-    return <p>Belum ada transaksi</p>;
-    }
-
-  // Perhitungan Statis
-  const totalIncome = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-  const totalExpense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+  const totalIncome = transactions.filter(t => t?.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+  const totalExpense = transactions.filter(t => t?.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
   const balance = totalIncome - totalExpense;
 
   const formatCurrency = (val) => {
@@ -170,11 +145,11 @@ export default function Dashboard() {
               className="flex items-center gap-4 py-4 group border-b border-gray-200 last:border-0"
             >
               <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center text-xl shrink-0">
-                {categoryIcons[tx.category] || "📦"}
+                {"📦"}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate text-slate-800">
-                  {tx.description || categoryLabels[tx.category]}
+                  {tx.description}
                 </p>
                 <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
                   {format(new Date(tx.date), 'd MMM yyyy', { locale: idLocale })}
@@ -185,7 +160,7 @@ export default function Dashboard() {
                   {tx.type === 'income' ? '+' : '-'}{formatUang(tx.amount)}
                 </p>
                 <Badge variant={tx.type === 'income' ? 'success' : 'secondary'} className="text-[9px] px-1.5 py-0 mt-0.5">
-                  {categoryLabels[tx.category]}
+                  {"📦"}
                 </Badge>
               </div>
             </motion.div>

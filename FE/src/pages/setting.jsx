@@ -1,33 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Bell, Palette, LogOut, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Badge from '../components/ui/Badge';
 import SelectFields from '../components/ui/select';
 import Button from '../components/ui/button';
+import { toast, Toaster } from "sonner";
 import ButtonGrad from '../components/ui/buttongrad';
 import Card from '../components/ui/card';
 import InputFields from '../components/ui/input';
-
-// Dummy Data untuk tampilan statis
-const DUMMY_USER = {
-  full_name: "Pengguna Wallee",
-  email: "halo@wallee.com"
-};
+import { useAuth } from '../context/AuthContext';
+import { getProfile, updateProfile } from '../services/user_service';
+import { Navigate } from 'react-router-dom';
 
 export default function Settings() {
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password_hash: '',
+    currency: 'IDR',
+  });
+  const { logout } = useAuth();
+  const [user, setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currency, setCurrency] = useState('IDR');
-  const [notifications, setNotifications] = useState(true);
-
-  const handleSave = () => {
-    alert('Pengaturan berhasil disimpan (Simulasi)');
+  const fetchProfile = async () => {
+    try {
+      const response = await getProfile();
+      console.log("Profile data:", response.data);
+      setTimeout(() => {
+        setUser(response.data);
+        setForm({
+          name: response.data.name || '',
+          email: response.data.email || '',
+          password_hash: '',
+        });
+      }, 0);
+    } catch (error) {
+      console.log(error);
+      toast.error('Gagal memuat profil. Coba lagi.');
+    } finally {
+      setLoading(false);
+    }
   };
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
+  try {
+    const response = await updateProfile(form);
+    setUser(response.data);
+    toast.success("Profile berhasil diperbarui");
+  } catch (error) {
+    console.log(error);
+    toast.error("Gagal memperbarui profile");
+  }
+};
 
   const handleLogout = () => {
-    alert('Keluar dari akun... (Simulasi)');
+    logout();
+    toast.success('Berhasil keluar');
+    Navigate("/login");
   };
 
   return (
     <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6 min-h-screen bg-slate-50">
+
+      <Toaster position="top-right" richColors />
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -10 }} 
@@ -59,16 +98,24 @@ export default function Settings() {
               <label className="text-sm font-medium px-1">Nama Lengkap</label>
               <InputFields
                 type="text"
-                value={DUMMY_USER.full_name} 
-                disabled
+                value={user.name||''} 
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </div>
             <div className="space-y-1.5">
               <label className="text-sm font-medium px-1">Alamat Email</label>
               <InputFields 
                 type="email"
-                value={DUMMY_USER.email} 
-                disabled
+                value={user.email||''} 
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium px-1">Kata Sandi</label>
+              <InputFields 
+                type="password"
+                placeholder={'isikan password anda saat ini'}
+                onChange={(e) => setForm({ ...form, password_hash: e.target.value })}
               />
             </div>
           </div>
@@ -108,26 +155,6 @@ export default function Settings() {
                 </SelectFields>
                 <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[hsl(220,10%,46%)]" />
               </div>
-            </div>
-
-            {/* Notification Switch (Simulasi dengan Button Toggle) */}
-            <div className="flex items-center justify-between py-2">
-              <div>
-                <p className="text-sm font-medium">Notifikasi Pintar</p>
-                <p className="text-xs text-[hsl(220,10%,46%)] mt-0.5">Terima pengingat & tips keuangan harian</p>
-              </div>
-              <button 
-                onClick={() => setNotifications(!notifications)}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-                  notifications ? 'bg-emerald-500' : 'bg-slate-200'
-                }`}
-              >
-                <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                    notifications ? 'translate-x-6' : 'translate-x-1'
-                  }`}
-                />
-              </button>
             </div>
           </div>
         </Card>

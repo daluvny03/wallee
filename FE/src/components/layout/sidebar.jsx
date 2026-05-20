@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 const NAV_ITEMS = [
   { to: "/dashboard",    icon: LayoutDashboard, label: "Dashboard"    },
   { to: "/transaksi", icon: ArrowLeftRight,     label: "Transaksi" },
-  { to: "/analytics",      icon: BarChart3,       label: "Analitik"      },
+  { to: "/analitik",      icon: BarChart3,       label: "Analitik"      },
   { to: "/aichat",      icon: MessageSquare,        label: "AI Assistant"   },
   { to: "/settings",     icon: Settings,        label: "Pengaturan"     },
 ];

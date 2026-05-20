@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, BarChart3, Calendar } from 'lucide-react';
 import Card from '../components/ui/card';
 import SelectFields from '../components/ui/select';
+import { getTransactions } from '../services/transactionService';
 
 const DUMMY_TRANSACTIONS = [
   { id: '1', type: 'income',  amount: 5000000, category: 'salary',        date: '2026-05-13' },
@@ -33,8 +34,22 @@ function formatCurrency(val) {
 // ── Page ──────────────────────────────────────────────────────
 export default function Analytics() {
   const [period, setPeriod]         = useState('month');
-  const [transactions]              = useState(DUMMY_TRANSACTIONS);
-
+  const [transactions, setTransactions] = useState([]);
+  const fetchTransactions = async () => {
+      try {
+        const data = await getTransactions();
+        console.log("API response for transactions:", data.data.transactions);
+        setTimeout(() => {
+        setTransactions(data.data.transactions);
+      }, 0);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchTransactions();
+    }, []);
   const now = new Date();
   const filtered = transactions.filter(tx => {
     if (!tx.date) return false;
@@ -52,16 +67,17 @@ export default function Analytics() {
     }
     return true;
   });
-  const totalIncome  = filtered.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-  const totalExpense = filtered.filter(t => t.type === 'expense').reduce((s, t) => s + t.amount, 0);
+  const totalIncome  = filtered.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0);
+  const totalExpense = filtered.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0);
 
   const categoryData = Object.entries(
     filtered.filter(t => t.type === 'expense').reduce((acc, t) => {
-      acc[t.category] = (acc[t.category] || 0) + t.amount;
+      const CategoryName = t?.category_name || "Lainnya";
+      acc[CategoryName] = (acc[CategoryName] || 0) + parseFloat(t.amount);
       return acc;
     }, {})
   )
-    .map(([key, value]) => ({ name: categoryLabels[key] || key, value }))
+    .map(([name, value]) => ({ name, value }))
     .sort((a, b) => b.value - a.value);
 
   const dailyData = filtered

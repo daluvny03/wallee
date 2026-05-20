@@ -1,7 +1,9 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
-import authRoutes from "./routes/authRoutes.js"
+import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/ProfileRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import categoriRoutes from "./routes/categoriRoutes.js";
@@ -14,7 +16,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/categories", categoriRoutes);
-dotenv.config();
 
 app.get("/", (req, res) => {
   res.send("API Wallee jalan");
