@@ -51,7 +51,7 @@ export default function Login() {
     try {
       await handleLogin(form);
     } catch (err) {
-      setApiErr(err.message ?? "Login gagal. Coba lagi.");
+      setApiErr("Login gagal. Coba lagi.");
     } finally {
       setLoading(false);
     }

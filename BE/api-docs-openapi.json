@@ -1,0 +1,953 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Wallee API",
+    "version": "1.0.0",
+    "description": "Dokumentasi API untuk Wallee (Express + PostgreSQL)."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Profile"
+    },
+    {
+      "name": "Transactions"
+    },
+    {
+      "name": "Categories"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "AuthRegisterRequest": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 50
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "AuthLoginRequest": {
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthLoginResponseData": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          }
+        }
+      },
+      "ProfileUpdateRequest": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 50
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "currentPassword": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 6
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "category_name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "category_icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TransactionCreateRequest": {
+        "type": "object",
+        "required": [
+          "amount",
+          "type",
+          "date"
+        ],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TransactionUpdateRequest": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "TransactionsListResponseData": {
+        "type": "object",
+        "properties": {
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer"
+              },
+              "page": {
+                "type": "integer"
+              },
+              "limit": {
+                "type": "integer"
+              },
+              "totalPages": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "TransactionSummaryResponseData": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "integer"
+          },
+          "year": {
+            "type": "integer"
+          },
+          "totalIncome": {
+            "type": "number"
+          },
+          "totalExpense": {
+            "type": "number"
+          },
+          "balance": {
+            "type": "number"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "income",
+              "expense"
+            ]
+          },
+          "icon": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Tidak ada/invalid token",
+        "content": {
+          "application/json": {
+            "example": {
+              "success": false,
+              "message": "Invalid token",
+              "data": null
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Data tidak ditemukan",
+        "content": {
+          "application/json": {
+            "example": {
+              "success": false,
+              "message": "string",
+              "data": null
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Validation failed",
+        "content": {
+          "application/json": {
+            "example": {
+              "success": false,
+              "message": "Validation failed",
+              "errors": [
+                "..."
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Registrasi pengguna",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRegisterRequest"
+              },
+              "example": {
+                "name": "Alice",
+                "email": "alice@mail.com",
+                "password": "secret123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User dibuat",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Pengguna sukses dibuat",
+                  "data": {
+                    "id": "uuid",
+                    "name": "Alice",
+                    "email": "alice@mail.com"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login pengguna",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthLoginRequest"
+              },
+              "example": {
+                "email": "alice@mail.com",
+                "password": "secret123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login berhasil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Login Berhasil",
+                  "data": {
+                    "token": "jwt-token",
+                    "user": {
+                      "id": "uuid",
+                      "name": "Alice",
+                      "email": "alice@mail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+
+    "/api/profile/": {
+      "get": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Ambil profil user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data profil sukses diambil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Profil sukses diambil",
+                  "data": {
+                    "id": "uuid",
+                    "name": "Alice",
+                    "email": "alice@mail.com",
+                    "created_at": "..."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Profile"
+        ],
+        "summary": "Update profil user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileUpdateRequest"
+              },
+              "example": {
+                "name": "Alice Updated",
+                "email": "alice2@mail.com",
+                "currentPassword": "oldpass",
+                "newPassword": "newpass123"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data Profil sukses diupdate",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Profil sukses diupdate",
+                  "data": {
+                    "id": "uuid",
+                    "name": "Alice Updated",
+                    "email": "alice2@mail.com",
+                    "created_at": "..."
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+
+    "/api/categories/": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Ambil kategori (income/expense)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ]
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Kategori sukses diambil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Kategori sukses diambil",
+                  "data": [
+                    {
+                      "id": "uuid",
+                      "name": "Gaji",
+                      "type": "income",
+                      "icon": "..."
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+
+    "/api/transactions/": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "List transaksi user (pagination + filter type)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "income",
+                "expense"
+              ]
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Transaksi sukses diambil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Transaksi sukses diambil",
+                  "data": {
+                    "transactions": [
+                      {
+                        "id": "uuid",
+                        "amount": 50000,
+                        "type": "expense",
+                        "description": "Makan",
+                        "date": "2024-01-01T00:00:00.000Z",
+                        "created_at": "...",
+                        "updated_at": "...",
+                        "category_id": "uuid",
+                        "category_name": "Makan",
+                        "category_icon": "..."
+                      }
+                    ],
+                    "pagination": {
+                      "total": 1,
+                      "page": 1,
+                      "limit": 10,
+                      "totalPages": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Buat transaksi baru",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionCreateRequest"
+              },
+              "example": {
+                "amount": 250000,
+                "type": "income",
+                "date": "2024-01-10",
+                "category_id": "uuid",
+                "description": "Gaji Januari"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Data Transaksi sukses dibuat",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Transaksi sukses dibuat",
+                  "data": {
+                    "id": "uuid",
+                    "amount": 250000,
+                    "type": "income",
+                    "description": "Gaji Januari",
+                    "date": "2024-01-10T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+
+    "/api/transactions/summary": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Ringkasan transaksi per bulan & tahun",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "required": false
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 2016,
+              "maximum": 2050
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ringkasan Transaksi sukses diambil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Ringkasan Transaksi sukses diambil",
+                  "data": {
+                    "month": 1,
+                    "year": 2024,
+                    "totalIncome": 1000000,
+                    "totalExpense": 200000,
+                    "balance": 800000
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    },
+
+    "/api/transactions/{id}": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Ambil transaksi berdasarkan id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Transaksi sukses diambil",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Transaksi sukses diambil",
+                  "data": {
+                    "id": "uuid",
+                    "amount": 123,
+                    "type": "expense",
+                    "date": "2024-01-01T00:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Update transaksi berdasarkan id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionUpdateRequest"
+              },
+              "example": {
+                "amount": 99999,
+                "description": "Updated desc"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Data Transaksi sukses diupdate",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Transaksi sukses diupdate",
+                  "data": {
+                    "id": "uuid",
+                    "amount": 99999
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Hapus transaksi berdasarkan id",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Data Transaksi sukses dihapus",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "message": "Data Transaksi sukses dihapus",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          }
+        }
+      }
+    }
+  }
+}
+

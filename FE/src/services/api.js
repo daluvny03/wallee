@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://wallee-production-fef2.up.railway.app/api/",
 });
 
 api.interceptors.request.use((config) => {

@@ -7,7 +7,7 @@ import Transaksi from "../pages/transaksi";
 import Chat from "../pages/chat";
 import Analitik from "../pages/analitik";
 import Setting from "../pages/setting";
-import addTransaction from "../pages/addTransaction";
+import AddTransaction from "../pages/addTransaction";
 
 import Layout from "../components/layout/layout";
 import ProtectedRoute from "./protectedRoute";
@@ -27,7 +27,7 @@ export default function AppRoutes() {
       >
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="transaksi" element={<Transaksi />} />
-        <Route path="add-transaction" element={<addTransaction />} />
+        <Route path="add-transaction" element={<AddTransaction />} />
         <Route path="aichat" element={<Chat />} />
         <Route path="analitik" element={<Analitik />} />
         <Route path="settings" element={<Setting />} />
