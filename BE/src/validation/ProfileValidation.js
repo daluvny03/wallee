@@ -7,9 +7,12 @@ const update = Joi.object({
 
   email: Joi.string()
     .email(),
-
-  password_hash: Joi.string()
-    .min(6),
+  currentPassword: Joi.string()
+    .min(6)
+    .when('password_hash', { is: Joi.exist(), then: Joi.required() }),
+  newPassword: Joi.string()
+    .min(6)
+    .when('currentPassword', { is: Joi.exist(), then: Joi.required() }),
 }).min(1);
 
 export default { update };
