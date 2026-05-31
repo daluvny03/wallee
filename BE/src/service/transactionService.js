@@ -15,7 +15,7 @@ const getAll = async (userId, { type, startDate, endDate, page = 1, limit = 20 }
   const [rows, countResult] = await Promise.all([
     db.query(
       `SELECT
-         t.id, t.amount, t.type, t.description, t.date,
+         t.id, t.amount, t.type, t.description, t.date, 
          t.created_at, t.updated_at,
          c.id   AS category_id,
          c.name AS category_name,
@@ -61,19 +61,19 @@ const getById = async (id, userId) => {
   return result.rows[0] || null;
 };
 
-const create = async (userId, { amount, type, description, date, category_id }) => {
+const create = async (userId, { amount, type, description, date, category_id, note }) => {
   const result = await db.query(
-    `INSERT INTO transactions (user_id, category_id, amount, type, description, date)
-     VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO transactions (user_id, category_id, amount, type, description, date, note)
+     VALUES ($1, $2, $3, $4, $5, $6, $7)
      RETURNING *`,
-    [userId, category_id || null, amount, type, description || null, date]
+    [userId, category_id || null, amount, type, description || null, date, note || null]
   );
 
   return result.rows[0];
 };
 
 const update = async (id, userId, fields) => {
-  const allowed = ['amount', 'type', 'description', 'date', 'category_id'];
+  const allowed = ['amount', 'type', 'description', 'date', 'category_id', 'note'];
   const setClauses = [];
   const params = [];
   let i = 1;

@@ -23,6 +23,11 @@ const create = Joi.object({
     .optional()
     .allow('')
     .allow(null),
+
+  note: Joi.string()
+    .optional()
+    .allow('')
+    .allow(null),
 });
 
 const update = Joi.object({

@@ -9,6 +9,7 @@ export const up = (pgm) => {
     date: { type: 'date', notNull: true },
     created_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') },
     updated_at: { type: 'timestamptz', notNull: true, default: pgm.func('now()') },
+    note: { type: 'text' },
   });
 
   // Index biar query by user cepet

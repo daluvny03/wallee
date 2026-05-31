@@ -13,6 +13,7 @@ import Button from '../components/ui/button';
 import ButtonGrad from '../components/ui/buttongrad';
 import { getTransactions } from '../services/transactionService';
 import { deleteTransaction } from '../services/transactionService';
+import { getCategories } from '../services/category_service';
 
 function formatCurrency(val) {
   return new Intl.NumberFormat('id-ID', {
@@ -25,7 +26,28 @@ export default function Transactions() {
   const [filterType,      setFilterType]      = useState('all');
   const [filterCategory,  setFilterCategory]  = useState('all');
   const [transactions,    setTransactions]    = useState([]);
-
+  const [categories, setCategories] = useState([]);
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data.data);
+  
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+      loadCategories();
+    }, []);
   const fetchTransactions = async () => {
     try {
       const data = await getTransactions();
@@ -111,9 +133,15 @@ export default function Transactions() {
           onChange={(e) => setFilterCategory(e.target.value)}
           className="sm:w-48"
         > 
-          <option value="all">Semua Kategori</option>
-          <option value="madang">madang</option>
-          <option value="blonjo">blonjo</option>
+          <option value="">Pilih kategori</option>
+            {categories.map((category) => (
+              <option
+                key={category.id}
+                value={category.name}
+              >
+                {category.name}
+              </option>
+            ))}
         </SelectFields>
       </div>
 

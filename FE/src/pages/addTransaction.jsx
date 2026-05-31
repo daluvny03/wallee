@@ -1,52 +1,65 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, TrendingUp, TrendingDown, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { createTransaction } from '../services/transactionService';
+import { getCategories } from '../services/category_service';
 
 import ButtonGrad from '../components/ui/buttongrad';
 import SelectFields from '../components/ui/select';
 import InputFields from '../components/ui/input';
 
-const categories = {
-  expense: [
-    { value: "food", label: "🍕 Makanan" },
-    { value: "transport", label: "🚗 Transportasi" },
-    { value: "shopping", label: "🛍️ Belanja" },
-    { value: "entertainment", label: "🎬 Hiburan" },
-    { value: "bills", label: "📄 Tagihan" },
-    { value: "health", label: "💊 Kesehatan" },
-    { value: "education", label: "📚 Pendidikan" },
-    { value: "other", label: "📦 Lainnya" },
-  ],
-  income: [
-    { value: "salary", label: "💰 Gaji" },
-    { value: "freelance", label: "💻 Freelance" },
-    { value: "investment", label: "📈 Investasi" },
-    { value: "gift", label: "🎁 Hadiah" },
-    { value: "other", label: "📦 Lainnya" },
-  ]
-};
-
 export default function AddTransaction() {
+  function set(field) {
+  return (e) => {
+    setForm((p) => ({
+      ...p,
+      [field]: e.target.value,
+    }));
+  };
+}
   const navigate = useNavigate();
   const [type, setType] = useState('expense');
   const [isPending, setIsPending] = useState(false);
   const [form, setForm] = useState({
+    type: 'expense',
     amount: '',
-    category: '',
+    category_id: '',
     description: '',
     date: new Date().toISOString().split('T')[0],
     note: ''
   });
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data.data);
 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+  const loadCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+    loadCategories();
+  }, []);
+  const filteredCategories = categories.filter(
+  (item) => item.type === form.type
+);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsPending(true);
-    
     try {
       await createTransaction(form);
-
       navigate("/transaksi");
     } catch (error) {
       console.log(error);
@@ -83,7 +96,7 @@ export default function AddTransaction() {
           <div className="flex gap-2 p-1 bg-gray-200 rounded-xl border border-gray-200">
             <button
               type="button"
-              onClick={() => { setType('expense'); setForm(f => ({ ...f, category: '' })); }}
+              onClick={() => { setType('expense'); setForm(f => ({ ...f, type: 'expense' })); }}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium transition-all ${
                 type === 'expense' 
                 ? "bg-white shadow-sm text-foreground" 
@@ -95,7 +108,7 @@ export default function AddTransaction() {
             </button>
             <button
               type="button"
-              onClick={() => { setType('income'); setForm(f => ({ ...f, category: '' })); }}
+              onClick={() => { setType('income'); setForm(f => ({ ...f, type: 'income' })); }}
               className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg text-sm font-medium transition-all ${
                 type === 'income' 
                 ? "bg-white shadow-sm text-foreground" 
@@ -125,13 +138,17 @@ export default function AddTransaction() {
             <label className="text-sm font-semibold px-1">Kategori</label>
             <div className="relative">
               <SelectFields 
-                value={form.category} 
-                onChange={(e) => setForm({ ...form, category: e.target.value })} 
-                required
+                value={form.category_id}
+                onChange={set("category_id")}
               >
-                <option value="" disabled>Pilih kategori</option>
-                {categories[type].map(cat => (
-                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                <option value="">Pilih kategori</option>
+                {filteredCategories.map((category) => (
+                  <option
+                    key={category.id}
+                    value={category.id}
+                  >
+                    {category.name}
+                  </option>
                 ))}
               </SelectFields>
               <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground" />

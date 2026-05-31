@@ -26,7 +26,6 @@ export default function Settings() {
   const fetchProfile = async () => {
     try {
       const response = await getProfile();
-      console.log("Profile data:", response.data);
       setTimeout(() => {
         setUser(response.data);
         setForm({
@@ -98,7 +97,7 @@ export default function Settings() {
               <label className="text-sm font-medium px-1">Nama Lengkap</label>
               <InputFields
                 type="text"
-                value={user.name||''} 
+                value={form.name || ''}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
             </div>
@@ -106,7 +105,7 @@ export default function Settings() {
               <label className="text-sm font-medium px-1">Alamat Email</label>
               <InputFields 
                 type="email"
-                value={user.email||''} 
+                value={form.email || ''}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
             </div>
