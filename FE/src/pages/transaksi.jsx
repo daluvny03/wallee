@@ -76,7 +76,7 @@ export default function Transactions() {
   const filtered = transactions.filter(tx => {
     const matchSearch   = !search || tx.description?.toLowerCase().includes(search.toLowerCase());
     const matchType     = filterType     === 'all' || tx.type     === filterType;
-    const matchCategory = filterCategory === 'all' || tx.category === filterCategory;
+    const matchCategory = filterCategory === 'all' || tx.category_name === filterCategory;
     return matchSearch && matchType && matchCategory;
   });
 
@@ -133,7 +133,7 @@ export default function Transactions() {
           onChange={(e) => setFilterCategory(e.target.value)}
           className="sm:w-48"
         > 
-          <option value="">Pilih kategori</option>
+          <option value="all">Semua Kategori</option>
             {categories.map((category) => (
               <option
                 key={category.id}
@@ -189,7 +189,7 @@ export default function Transactions() {
                             {tx.description}
                           </p>
                           <div className="flex items-center gap-2 mt-1">
-                            <Badge>{"📦"}</Badge>
+                            <Badge>{tx.category_name}</Badge>
                           </div>
                         </div>
 

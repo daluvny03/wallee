@@ -10,7 +10,7 @@ import Card from '../components/ui/card';
 import InputFields from '../components/ui/input';
 import { useAuth } from '../context/AuthContext';
 import { getProfile, updateProfile } from '../services/user_service';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export default function Settings() {
   const [form, setForm] = useState({
@@ -56,10 +56,12 @@ export default function Settings() {
   }
 };
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     logout();
     toast.success('Berhasil keluar');
-    Navigate("/login");
+    navigate("/login");
   };
 
   return (
@@ -116,6 +118,15 @@ export default function Settings() {
                 placeholder={'isikan password anda saat ini'}
                 onChange={(e) => setForm({ ...form, password_hash: e.target.value })}
               />
+            </div>
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={() => navigate('/change-password')}
+                className="text-sm text-blue-600 font-semibold hover:underline"
+              >
+                Ganti password akun
+              </button>
             </div>
           </div>
         </Card>

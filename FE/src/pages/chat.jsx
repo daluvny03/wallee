@@ -6,7 +6,6 @@ import Card from '../components/ui/card';
 import ButtonGrad from '../components/ui/buttongrad';
 import InputFields from '../components/ui/input';
 
-// --- DATA DARI CLAUDE ---
 const QUICK_CHIPS = [
   "Rangkum pengeluaran bulan ini",
   "Kategori apa yang paling boros?",

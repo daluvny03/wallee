@@ -8,6 +8,7 @@ import Chat from "../pages/chat";
 import Analitik from "../pages/analitik";
 import Setting from "../pages/setting";
 import AddTransaction from "../pages/addTransaction";
+import ChangePassword from "../pages/changePassword";
 
 import Layout from "../components/layout/layout";
 import ProtectedRoute from "./protectedRoute";
@@ -31,6 +32,7 @@ export default function AppRoutes() {
         <Route path="aichat" element={<Chat />} />
         <Route path="analitik" element={<Analitik />} />
         <Route path="settings" element={<Setting />} />
+        <Route path="change-password" element={<ChangePassword />} />
       </Route>
     </Routes>
   );

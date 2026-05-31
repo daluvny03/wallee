@@ -12,3 +12,8 @@ export const updateProfile = async (data) => {
   );
   return response.data;
 };
+
+export const changePassword = async (data) => {
+  const response = await api.put("/profile", data);
+  return response.data;
+};

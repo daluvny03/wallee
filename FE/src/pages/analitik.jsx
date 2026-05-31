@@ -6,23 +6,6 @@ import Card from '../components/ui/card';
 import SelectFields from '../components/ui/select';
 import { getTransactions } from '../services/transactionService';
 
-const DUMMY_TRANSACTIONS = [
-  { id: '1', type: 'income',  amount: 5000000, category: 'salary',        date: '2026-05-13' },
-  { id: '2', type: 'expense', amount: 150000,  category: 'food',          date: '2026-05-01' },
-  { id: '3', type: 'expense', amount: 200000,  category: 'transport',     date: '2026-05-03' },
-  { id: '4', type: 'expense', amount: 450000,  category: 'shopping',      date: '2026-05-04' },
-  { id: '5', type: 'expense', amount: 80000,   category: 'food',          date: '2026-05-05' },
-  { id: '6', type: 'income',  amount: 1200000, category: 'freelance',     date: '2026-05-06' },
-  { id: '7', type: 'expense', amount: 300000,  category: 'bills',         date: '2026-05-07' },
-  { id: '8', type: 'expense', amount: 120000,  category: 'entertainment', date: '2026-05-08' },
-];
-
-const categoryLabels = {
-  food: "Makanan", transport: "Transport", shopping: "Belanja",
-  entertainment: "Hiburan", bills: "Tagihan", health: "Kesehatan",
-  salary: "Gaji", freelance: "Freelance", other: "Lainnya",
-};
-
 const COLORS = ['#3975E6', '#9E4CC6', '#34D399', '#F59E0B', '#EF4444', '#6366F1', '#EC4899', '#14B8A6'];
 
 function formatCurrency(val) {
@@ -38,7 +21,6 @@ export default function Analytics() {
   const fetchTransactions = async () => {
       try {
         const data = await getTransactions();
-        console.log("API response for transactions:", data.data.transactions);
         setTimeout(() => {
         setTransactions(data.data.transactions);
       }, 0);
