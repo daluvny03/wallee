@@ -1,7 +1,7 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 app = FastAPI(
     title="Personal Finance — Anomaly Detection API",
-    version="2.0.0",
+    version="2.1.0",
     description="Detects unusual spending behaviour using a TensorFlow Autoencoder.",
 )
 
@@ -54,17 +54,11 @@ class TransactionRequest(BaseModel):
 # RESPONSE MODELS
 # ==================================================
 
-class RelatedItem(BaseModel):
-    item_name: str
-    usual_price: Optional[int] = None
-    current_price: Optional[int] = None
-
-
 class AnomalyItem(BaseModel):
     id: str
     type: str
     message: str
-    related_items: List[RelatedItem] = []
+    detail: List[Dict[str, Any]] = []
     dismissed: bool = False
 
 
@@ -98,10 +92,12 @@ def predict_transaction(transaction: TransactionRequest):
 
     anomalies = []
 
-    # ==========================================
+    # ==================================================
     # DEMO RULES
-    # ==========================================
+    # (sementara untuk Swagger/API contract)
+    # ==================================================
 
+    # SPENDING SPIKE
     if transaction.amount > 300000:
 
         anomalies.append(
@@ -109,24 +105,36 @@ def predict_transaction(transaction: TransactionRequest):
                 id="an_001",
                 type="SPENDING_SPIKE",
                 message="Pengeluaran lebih tinggi dari biasanya",
+                detail=[
+                    {
+                        "usual_amount": 100000,
+                        "current_amount": transaction.amount,
+                        "ratio": round(transaction.amount / 100000, 2)
+                    }
+                ],
                 dismissed=False
             )
         )
 
-    if transaction.time.startswith("00") \
-       or transaction.time.startswith("01") \
-       or transaction.time.startswith("02") \
-       or transaction.time.startswith("03"):
+    # UNUSUAL TIME
+    if transaction.time.startswith(("00", "01", "02", "03")):
 
         anomalies.append(
             AnomalyItem(
                 id="an_002",
                 type="UNUSUAL_TIME",
                 message="Transaksi di luar jam biasa",
+                detail=[
+                    {
+                        "usual_hour_range": "08:00 - 22:00",
+                        "detected_hour": transaction.time
+                    }
+                ],
                 dismissed=False
             )
         )
 
+    # PRICE SPIKE
     for item in transaction.items:
 
         if item.unit_price > 30000:
@@ -136,16 +144,36 @@ def predict_transaction(transaction: TransactionRequest):
                     id="an_003",
                     type="PRICE_SPIKE",
                     message="Harga item naik 3× dari biasanya",
-                    related_items=[
-                        RelatedItem(
-                            item_name=item.item_name,
-                            usual_price=12000,
-                            current_price=item.unit_price
-                        )
+                    detail=[
+                        {
+                            "item_name": item.item_name,
+                            "usual_price": 12000,
+                            "current_price": item.unit_price
+                        }
                     ],
                     dismissed=False
                 )
             )
+
+    # FREQUENCY SPIKE
+    if transaction.merchant.lower() == "steam":
+
+        anomalies.append(
+            AnomalyItem(
+                id="an_004",
+                type="FREQUENCY_SPIKE",
+                message="Frekuensi transaksi lebih tinggi dari biasanya",
+                detail=[
+                    {
+                        "merchant": transaction.merchant,
+                        "usual_frequency": 1,
+                        "current_frequency": 4,
+                        "period": "bulan"
+                    }
+                ],
+                dismissed=False
+            )
+        )
 
     return TransactionDetailResponse(
         id=transaction.id,
@@ -169,7 +197,6 @@ def predict_batch(
     results = []
 
     for trx in transactions:
-
         results.append(
             predict_transaction(trx)
         )
