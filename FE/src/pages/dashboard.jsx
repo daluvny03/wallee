@@ -127,6 +127,7 @@ export default function Dashboard() {
     // Ganti dengan: const res = await api.get("/notifications/latest")
     // dan setNotification(res.data)
     const latest = DUMMY_NOTIFICATIONS[0]; // index 0 = paling baru
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNotification(latest);
   }, []);
 

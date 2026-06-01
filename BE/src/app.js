@@ -7,6 +7,7 @@ import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/ProfileRoutes.js";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import categoriRoutes from "./routes/categoriRoutes.js";
+import forecastRoutes from "./routes/forecastRoutes.js";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/categories", categoriRoutes);
+app.use("/api/ai/forecast", forecastRoutes);
 
 app.get("/", (req, res) => {
   res.send("API Wallee jalan");
