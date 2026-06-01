@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight, LineChart, Sparkles, PieChart, Target, Lightbulb, Bot, Star } from 'lucide-react';
+import { ArrowRight, LineChart, Sparkles, PieChart, Bot, Star, Receipt } from 'lucide-react';
 
 import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
@@ -165,49 +165,49 @@ export function AboutSection() {
         </p>
 
         {/* Solusi Kami Card */}
-        <div className="mt-16 bg-slate-900 rounded-[2rem] p-8 md:p-12 lg:p-16 text-left grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="mt-16 bg-gray-100 rounded-[2rem] p-8 md:p-12 lg:p-16 text-left grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <span className="text-sm font-bold text-emerald-400 uppercase tracking-widest">
+            <span className="text-sm font-bold text-blue-600 uppercase tracking-widest">
               SOLUSI KAMI
             </span>
-            <h3 className="text-3xl md:text-4xl font-bold text-white mt-4 mb-6 leading-tight">
+            <h3 className="text-3xl md:text-4xl font-bold text-slate-900 mt-4 mb-6 leading-tight">
               Demokratisasi kecerdasan finansial untuk semua orang Indonesia.
             </h3>
-            <p className="text-slate-400 text-lg mb-10 leading-relaxed">
+            <p className="text-gray-600 text-lg mb-10 leading-relaxed">
               Wallee hadir sebagai teman finansial yang paling dekat, paling jujur, dan paling cocok denganmu — bukan hanya untuk orang kaya.
             </p>
-            <Link to="/register" className="inline-flex items-center gap-2 border border-slate-700 hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-full transition-colors">
+            <Link to="/register" className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium px-6 py-3 rounded-full transition-all hover:shadow-lg hover:-translate-y-0.5">
               Coba Sekarang <ArrowRight size={18} />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
-              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
-                <LineChart size={24} />
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-600 mb-4">
+                <Receipt size={24} />
               </div>
-              <span className="text-white font-semibold">Tracking otomatis</span>
+              <span className="text-slate-800 font-semibold">Kelola Transaksi</span>
             </div>
             
-            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4">
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 mb-4">
                 <Bot size={24} />
               </div>
-              <span className="text-white font-semibold">AI 24/7</span>
+              <span className="text-slate-800 font-semibold">Deteksi Anomali</span>
             </div>
 
-            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
-              <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400 mb-4">
-                <Target size={24} />
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-600 mb-4">
+                <LineChart size={24} />
               </div>
-              <span className="text-white font-semibold">Goal planning</span>
+              <span className="text-slate-800 font-semibold">Prediksi Keuangan</span>
             </div>
 
-            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
-              <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4">
-                <Lightbulb size={24} />
+            <div className="bg-white border border-gray-200 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-gray-50 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 mb-4">
+                <PieChart size={24} />
               </div>
-              <span className="text-white font-semibold">Insights cerdas</span>
+              <span className="text-slate-800 font-semibold">Laporan Otomatis</span>
             </div>
           </div>
         </div>
