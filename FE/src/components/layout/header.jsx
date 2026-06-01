@@ -8,24 +8,24 @@ export default function Header() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <div className="flex items-center gap-2 cursor-pointer">
+                    <Link to="/" className="flex items-center gap-2 cursor-pointer">
                         <div className="bg-gradient-to-br from-blue-500 to-purple-500 text-white p-1.5 rounded-lg">
                             <Wallet size={20} strokeWidth={2.5} />
                         </div>
                         <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
                             Wallee
                         </span>
-                    </div>
+                    </Link>
 
                     {/* Navigation Links (Center) */}
                     <nav className="hidden md:flex items-center space-x-8 font-medium">
-                        <a href="#home" className="text-gray-900 hover:text-blue-600 transition-colors">
+                        <a href="/#home" className="text-gray-900 hover:text-blue-600 transition-colors">
                             Home
                         </a>
-                        <a href="#feature" className="text-gray-500 hover:text-blue-600 transition-colors">
+                        <a href="/#feature" className="text-gray-500 hover:text-blue-600 transition-colors">
                             Feature
                         </a>
-                        <a href="#testimoni" className="text-gray-500 hover:text-blue-600 transition-colors">
+                        <a href="/#testimoni" className="text-gray-500 hover:text-blue-600 transition-colors">
                             Testimoni
                         </a>
                     </nav>

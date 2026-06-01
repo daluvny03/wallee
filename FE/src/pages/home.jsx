@@ -6,6 +6,9 @@ import { Star } from 'lucide-react';
 
 
 
+import Header from '../components/layout/header';
+import Footer from '../components/layout/footer';
+
 export function HomeSection() {
   return (
     <div id="home" className="flex flex-col justify-center bg-white w-full min-h-screen pt-20 pb-24">
@@ -150,10 +153,14 @@ export function Testimoni() {
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen bg-slate-50 overflow-x-hidden font-sans">
-      <HomeSection />
-      <Feature />
-      <Testimoni />
-    </div>
+    <>
+      <Header />
+      <div className="w-full min-h-screen bg-slate-50 overflow-x-hidden font-sans">
+        <HomeSection />
+        <Feature />
+        <Testimoni />
+      </div>
+      <Footer />
+    </>
   );
 }
