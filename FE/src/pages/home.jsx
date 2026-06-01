@@ -1,10 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight } from 'lucide-react';
-import { LineChart, Sparkles, PieChart } from 'lucide-react';
-import { Star } from 'lucide-react';
-
-
+import { ArrowRight, ChevronRight, LineChart, Sparkles, PieChart, Target, Lightbulb, Bot, Star } from 'lucide-react';
 
 import Header from '../components/layout/header';
 import Footer from '../components/layout/footer';
@@ -151,12 +147,82 @@ export function Testimoni() {
     );
 }
 
+export function AboutSection() {
+  return (
+    <section id="about" className="w-full bg-white py-24">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 text-center">
+        <span className="text-sm font-bold text-blue-600 uppercase tracking-widest">
+          MASALAHNYA NYATA
+        </span>
+        <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mt-4 mb-6 leading-tight">
+          Kegagalan finansial bukan soal malas.<br className="hidden md:block" />
+          <span className="bg-gradient-to-br from-blue-500 to-purple-500 text-transparent bg-clip-text"> Tapi soal akses. </span>
+        </h2>
+        <p className="text-lg text-gray-500 max-w-3xl mx-auto leading-relaxed">
+          Tidak semua orang punya akses ke konsultan finansial mahal. Akibatnya, banyak yang baru
+          sadar kesalahan mereka ketika sudah terlambat — hutang menumpuk, tabungan nol, dan
+          masa depan terancam.
+        </p>
+
+        {/* Solusi Kami Card */}
+        <div className="mt-16 bg-slate-900 rounded-[2rem] p-8 md:p-12 lg:p-16 text-left grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <span className="text-sm font-bold text-emerald-400 uppercase tracking-widest">
+              SOLUSI KAMI
+            </span>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mt-4 mb-6 leading-tight">
+              Demokratisasi kecerdasan finansial untuk semua orang Indonesia.
+            </h3>
+            <p className="text-slate-400 text-lg mb-10 leading-relaxed">
+              Wallee hadir sebagai teman finansial yang paling dekat, paling jujur, dan paling cocok denganmu — bukan hanya untuk orang kaya.
+            </p>
+            <Link to="/register" className="inline-flex items-center gap-2 border border-slate-700 hover:bg-slate-800 text-white font-medium px-6 py-3 rounded-full transition-colors">
+              Coba Sekarang <ArrowRight size={18} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-400 mb-4">
+                <LineChart size={24} />
+              </div>
+              <span className="text-white font-semibold">Tracking otomatis</span>
+            </div>
+            
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 mb-4">
+                <Bot size={24} />
+              </div>
+              <span className="text-white font-semibold">AI 24/7</span>
+            </div>
+
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center text-orange-400 mb-4">
+                <Target size={24} />
+              </div>
+              <span className="text-white font-semibold">Goal planning</span>
+            </div>
+
+            <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6 flex flex-col items-center justify-center text-center hover:bg-slate-800 transition-colors">
+              <div className="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400 mb-4">
+                <Lightbulb size={24} />
+              </div>
+              <span className="text-white font-semibold">Insights cerdas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <>
       <Header />
       <div className="w-full min-h-screen bg-slate-50 overflow-x-hidden font-sans">
         <HomeSection />
+        <AboutSection />
         <Feature />
         <Testimoni />
       </div>
