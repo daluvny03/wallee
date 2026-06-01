@@ -9,7 +9,7 @@ import {
   MessageSquare,
   Plus,
 } from "lucide-react";
-import WalleeLogo from "/Users/macbookpro2019/Documents/Dicoding/wallee/FE/src/assets/Logo_Full.png";
+import WalleeLogo from "../../assets/Logo_Full.png";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
