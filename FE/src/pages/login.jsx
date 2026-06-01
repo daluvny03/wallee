@@ -67,11 +67,11 @@ export default function Login() {
         </div>
 
         <div className="mb-7">
-          <h1 className="font-display text-2xl font-bold text-text-primary mb-1.5">
-            Selamat datang kembali 👋
-          </h1>
-          <p className="text-base text-gray-500">
-            Masuk untuk melihat ringkasan keuanganmu.
+          <h1 className="font-display text-2xl font-bold text-text-primary mb-1.5 text-center">
+            Selamat datang kembali
+          </h1> 
+          <p className="text-base text-gray-500 text-center">
+            Masuk untuk melihat ringkasan keuanganmu
           </p>
         </div>
 
