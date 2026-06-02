@@ -111,17 +111,81 @@ class AnomalyService:
     ) -> List[Dict[str, Any]]:
 
         anomalies = []
-
         anomaly_counter = 1
+
+        # =================================================
+        # DERIVED FEATURES
+        # =================================================
+
+        amount = enriched.get("amount", 0)
+
+        historical_avg_amount = enriched.get(
+            "historical_avg_amount"
+        )
+
+        amount_ratio = 0
+
+        if (
+            historical_avg_amount is not None
+            and historical_avg_amount > 0
+        ):
+            amount_ratio = (
+                amount /
+                historical_avg_amount
+            )
+
+        merchant_monthly_freq = enriched.get(
+            "merchant_monthly_freq",
+            0
+        )
+
+        merchant_avg_freq = (
+            enriched.get("merchant_avg_freq")
+            or 0
+        )
+
+        merchant_freq_ratio = 0
+
+        if merchant_avg_freq > 0:
+            merchant_freq_ratio = (
+                merchant_monthly_freq /
+                merchant_avg_freq
+            )
+
+        trx_time = enriched.get("time")
+
+        usual_hour_min = enriched.get(
+            "usual_hour_min"
+        )
+
+        usual_hour_max = enriched.get(
+            "usual_hour_max"
+        )
+
+        is_unusual_hour = False
+
+        if (
+            trx_time
+            and usual_hour_min is not None
+            and usual_hour_max is not None
+        ):
+            try:
+
+                hour = int(
+                    trx_time.split(":")[0]
+                )
+
+                is_unusual_hour = (
+                    hour < usual_hour_min
+                    or hour > usual_hour_max
+                )
+
+            except Exception:
+                pass
 
         # =================================================
         # SPENDING SPIKE
         # =================================================
-
-        amount_ratio = enriched.get(
-            "amount_ratio",
-            0
-        )
 
         if amount_ratio > 3:
 
@@ -132,20 +196,13 @@ class AnomalyService:
                     "message": "Pengeluaran lebih tinggi dari biasanya",
                     "detail": [
                         {
-                            "usual_amount":
-                                round(
-                                    enriched.get(
-                                        "historical_avg_amount",
-                                        0
-                                    ),
-                                    2
-                                ),
+                            "historical_avg_amount":
+                                round(historical_avg_amount, 2)
+                                if historical_avg_amount is not None
+                                else 0,
                             "current_amount":
-                                enriched.get(
-                                    "amount",
-                                    0
-                                ),
-                            "ratio":
+                                amount,
+                            "amount_ratio":
                                 round(
                                     amount_ratio,
                                     2
@@ -162,26 +219,21 @@ class AnomalyService:
         # UNUSUAL TIME
         # =================================================
 
-        if enriched.get(
-            "is_unusual_hour",
-            0
-        ) == 1:
+        if is_unusual_hour:
 
             anomalies.append(
                 {
                     "id": f"an_{anomaly_counter:03d}",
                     "type": "UNUSUAL_TIME",
-                    "message": "Transaksi di luar jam biasa",
+                    "message": "Transaksi dilakukan di luar jam biasanya",
                     "detail": [
                         {
-                            "usual_hour_range":
-                                f"{enriched.get('usual_hour_min', 0):02d}:00 - "
-                                f"{enriched.get('usual_hour_max', 23):02d}:00",
-                            "detected_hour":
-                                enriched.get(
-                                    "time",
-                                    ""
-                                )
+                            "time":
+                                trx_time,
+                            "usual_hour_min":
+                                usual_hour_min,
+                            "usual_hour_max":
+                                usual_hour_max
                         }
                     ],
                     "dismissed": False
@@ -194,18 +246,13 @@ class AnomalyService:
         # FREQUENCY SPIKE
         # =================================================
 
-        merchant_freq_ratio = enriched.get(
-            "merchant_freq_ratio",
-            0
-        )
-
         if merchant_freq_ratio > 3:
 
             anomalies.append(
                 {
                     "id": f"an_{anomaly_counter:03d}",
                     "type": "FREQUENCY_SPIKE",
-                    "message": "Frekuensi transaksi lebih tinggi dari biasanya",
+                    "message": "Frekuensi transaksi merchant meningkat tajam",
                     "detail": [
                         {
                             "merchant":
@@ -213,20 +260,14 @@ class AnomalyService:
                                     "merchant",
                                     ""
                                 ),
-                            "usual_frequency":
+                            "merchant_monthly_freq":
+                                merchant_monthly_freq,
+                            "merchant_avg_freq":
                                 round(
-                                    enriched.get(
-                                        "merchant_avg_freq",
-                                        0
-                                    ),
+                                    merchant_avg_freq,
                                     2
                                 ),
-                            "current_frequency":
-                                enriched.get(
-                                    "merchant_monthly_freq",
-                                    0
-                                ),
-                            "ratio":
+                            "merchant_freq_ratio":
                                 round(
                                     merchant_freq_ratio,
                                     2
@@ -256,7 +297,10 @@ class AnomalyService:
                 "harga"
             )
 
-            if not usual_price:
+            if (
+                usual_price is None
+                or usual_price <= 0
+            ):
                 continue
 
             ratio = (
@@ -270,21 +314,21 @@ class AnomalyService:
                     {
                         "id": f"an_{anomaly_counter:03d}",
                         "type": "PRICE_SPIKE",
-                        "message": "Harga item naik 3× dari biasanya",
+                        "message": "Harga item jauh lebih tinggi dari biasanya",
                         "detail": [
                             {
                                 "item_name":
                                     item.get(
                                         "item_name"
                                     ),
+                                "harga":
+                                    current_price,
                                 "usual_price":
                                     round(
                                         usual_price,
-                                        0
+                                        2
                                     ),
-                                "current_price":
-                                    current_price,
-                                "ratio":
+                                "price_ratio":
                                     round(
                                         ratio,
                                         2

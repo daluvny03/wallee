@@ -97,48 +97,54 @@ class TransactionRequest(BaseModel):
 
     # ── Context computed by Spring Boot ──────────────────────────────────
     # Amount context
-    historical_avg_amount : float = Field(
-        ...,
+    historical_avg_amount : Optional[float] = Field(
+        None,
         description="User's 30-day rolling mean total_harga",
     )
-    amount_ratio          : float = Field(
-        ...,
-        description="amount / historical_avg_amount",
-    )
+    # amount_ratio          : float = Field(
+    #     ...,
+    #     description="amount / historical_avg_amount",
+    # )
 
     # Time context
-    hour            : int   = Field(..., ge=0, le=23)
-    month           : int   = Field(..., ge=1, le=12)
-    is_weekend      : int   = Field(..., ge=0, le=1)
-    usual_hour_min  : int   = Field(..., description="5th  percentile of user's transaction hours")
-    usual_hour_max  : int   = Field(..., description="95th percentile of user's transaction hours")
-    is_unusual_hour : int   = Field(..., ge=0, le=1,
-                                    description="1 if hour outside [usual_hour_min, usual_hour_max]")
+    # hour            : int   = Field(..., ge=0, le=23)
+    # month           : int   = Field(..., ge=1, le=12)
+    # is_weekend      : int   = Field(..., ge=0, le=1)
+    usual_hour_min  : Optional[int] = Field(
+        None,
+        description="5th  percentile of user's transaction hours"
+    )
+    usual_hour_max  : Optional[int] = Field(
+        None,
+        description="95th percentile of user's transaction hours"
+    )
+    # is_unusual_hour : int   = Field(..., ge=0, le=1,
+    #                                 description="1 if hour outside [usual_hour_min, usual_hour_max]")
 
     # Merchant frequency context
     merchant_monthly_freq : int   = Field(..., description="Times user visited merchant this month")
     merchant_avg_freq     : float = Field(..., description="Historical monthly average visits")
-    merchant_freq_ratio   : float = Field(..., description="merchant_monthly_freq / merchant_avg_freq")
+    # merchant_freq_ratio   : float = Field(..., description="merchant_monthly_freq / merchant_avg_freq")
 
     # Category context
-    category_freq_ratio   : float = Field(..., description="(current month count) / avg monthly count for top category")
+    # category_freq_ratio   : float = Field(..., description="(current month count) / avg monthly count for top category")
 
     # Payment / item context
-    is_digital_payment    : int   = Field(..., ge=0, le=1)
-    qty_zscore            : float = Field(0.0, description="z-score of total qty vs user history")
-    item_max_price_ratio  : float = Field(0.0, description="max(item.harga) / median historical price")
+    # is_digital_payment    : int   = Field(..., ge=0, le=1)
+    # qty_zscore            : float = Field(0.0, description="z-score of total qty vs user history")
+    # item_max_price_ratio  : float = Field(0.0, description="max(item.harga) / median historical price")
 
     # Autoencoder numeric features (mirrors feature_columns.pkl — Spring Boot can
     # send 0.0 for features it cannot compute; they will degrade gracefully)
-    amount_rolling_ratio  : float = Field(0.0)
-    amount_zscore         : float = Field(0.0)
-    user_rolling_mean_amt : float = Field(0.0)
-    user_rolling_std_amt  : float = Field(0.0)
-    hour_deviation        : float = Field(0.0)
-    hour_zscore           : float = Field(0.0)
-    category_share        : float = Field(0.0)
-    user_cat_cumcount     : float = Field(0.0)
-    user_merchant_cumcount: float = Field(0.0)
+    # amount_rolling_ratio  : float = Field(0.0)
+    # amount_zscore         : float = Field(0.0)
+    # user_rolling_mean_amt : float = Field(0.0)
+    # user_rolling_std_amt  : float = Field(0.0)
+    # hour_deviation        : float = Field(0.0)
+    # hour_zscore           : float = Field(0.0)
+    # category_share        : float = Field(0.0)
+    # user_cat_cumcount     : float = Field(0.0)
+    # user_merchant_cumcount: float = Field(0.0)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
