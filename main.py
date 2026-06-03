@@ -4,21 +4,24 @@ import numpy as np
 import joblib
 import tensorflow as tf
 import json
+import os
 
 app = FastAPI(title="Finance Forecast API")
 
-# Load Model & Scalers
-# Ensure these paths are correct relative to the main.py location
-MODEL = tf.keras.models.load_model('models/forecast_model.keras')
-SCALER_X = joblib.load('models/scaler_X.save')
-SCALER_Y = joblib.load('models/scaler_y.save')
+# Use absolute paths for Railway reliability
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, 'models', 'forecast_model.keras')
+SCALER_X_PATH = os.path.join(BASE_DIR, 'models', 'scaler_X.save')
+SCALER_Y_PATH = os.path.join(BASE_DIR, 'models', 'scaler_y.save')
+JSON_PATH = os.path.join(BASE_DIR, 'models', 'ensemble_forecast_results.json')
 
-# Load pre-calculated ensemble forecast results
-try:
-    with open('models/ensemble_forecast_results.json', 'r') as f:
-        ENSEMBLE_FORECAST_RESULTS = json.load(f)
-except FileNotFoundError:
-    raise RuntimeError("ensemble_forecast_results.json not found. Run the notebook to generate it.")
+# Load Model & Scalers
+MODEL = tf.keras.models.load_model(MODEL_PATH)
+SCALER_X = joblib.load(SCALER_X_PATH)
+SCALER_Y = joblib.load(SCALER_Y_PATH)
+
+with open(JSON_PATH, 'r') as f:
+    ENSEMBLE_FORECAST_RESULTS = json.load(f)
 
 class PredictRequest(BaseModel):
     lag_1: float
@@ -42,14 +45,7 @@ def health():
 
 @app.post("/predict")
 def predict(data: PredictRequest):
-    """
-    This endpoint returns the pre-calculated monthly ensemble forecast and its confidence interval.
-    The input daily features are validated but not used to recompute the monthly forecast for this version.
-    """
     try:
-        # Although daily features are provided and validated via Pydantic,
-        # for this specific request (monthly forecast + CI), we return the pre-calculated ensemble result.
-        # If a daily prediction based on these inputs were needed, a different logic would apply here.
         return {
             "success": True,
             "message": "OK",
