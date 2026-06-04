@@ -20,6 +20,9 @@ payload = {
 
 print(f"Testing API at {url}...")
 
+# Add an initial delay to allow the server to start up fully
+time.sleep(5)
+
 for i in range(3):
     try:
         response = requests.post(url, json=payload, timeout=5)

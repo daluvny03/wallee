@@ -49,7 +49,7 @@ def predict(data: PredictRequest):
         return {
             "success": True,
             "message": "OK",
-            "forecast_next_month": ENSEMBLE_FORECAST_RESULTS["forecast_next_month"],
+            "forecast_this_month": ENSEMBLE_FORECAST_RESULTS["forecast_this_month"],
             "confidence_lower": ENSEMBLE_FORECAST_RESULTS["confidence_lower"],
             "confidence_upper": ENSEMBLE_FORECAST_RESULTS["confidence_upper"]
         }
