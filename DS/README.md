@@ -102,8 +102,9 @@ Skor akhir berada pada rentang:
 Clone repository:
 
 ```bash
-git clone https://github.com/Wallee-CC26-PSU167/Wallee-DataScience.git
-cd Wallee-DataScience-main
+git clone https://github.com/daluvny03/wallee.git
+cd wallee-main
+cd DS
 ```
 
 Install dependencies:
@@ -127,7 +128,9 @@ Wallee/
 ├── feature_engineered_finance_dataset.csv
 ├── requirements.txt
 ├── README.md
-└── assets/
+└── WALLEE_ANALISIS_DATA.ipynb
+└── WALLEE_Laporan_Teknis.pdf
+└── Wallee Logo.png
 ```
 
 ## 👥 Team
