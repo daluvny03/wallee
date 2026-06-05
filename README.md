@@ -40,6 +40,11 @@ wallee/
 
 ---
 
+## 🛠️ Model AI
+
+Model untuk Forecasting dan Anomaly Detection dapat diakses pada link berikut:
+https://drive.google.com/drive/folders/1bbwm7knqQTGO-pEm8JoGxKiKpEn5kiZI?usp=drive_link
+
 ## ⚙️ Cara Menjalankan
 
 ### Prasyarat
