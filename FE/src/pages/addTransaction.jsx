@@ -352,7 +352,7 @@ export default function AddTransaction() {
                   type="text"
                   placeholder="cth. Alfamart, Warung Bu Sari"
                   value={incomeForm.description}
-                  onChange={e => setExpenseForm(p => ({ ...p, description: e.target.value }))}
+                  onChange={e => setIncomeForm(p => ({ ...p, description: e.target.value }))}
                   required
                 />
               </div>
