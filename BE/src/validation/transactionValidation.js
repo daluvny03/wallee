@@ -6,7 +6,7 @@ const create = Joi.object({
     .required(),
 
   description: Joi.string()
-    .required(),
+    .optional(),
 
   date: Joi.date()
     .required(),
