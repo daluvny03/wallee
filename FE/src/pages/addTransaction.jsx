@@ -351,7 +351,7 @@ export default function AddTransaction() {
                 <InputFields
                   type="text"
                   placeholder="cth. Alfamart, Warung Bu Sari"
-                  value={expenseForm.description}
+                  value={incomeForm.description}
                   onChange={e => setExpenseForm(p => ({ ...p, description: e.target.value }))}
                   required
                 />
